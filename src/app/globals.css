@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 46 100% 98%;
+    --foreground: 166 28% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 166 28% 14%;
+    --primary: 166 69% 23%;
+    --primary-foreground: 44 100% 97%;
+    --secondary: 39 100% 91%;
+    --secondary-foreground: 166 28% 18%;
+    --muted: 42 33% 93%;
+    --muted-foreground: 164 10% 36%;
+    --accent: 28 90% 60%;
+    --accent-foreground: 30 40% 13%;
+    --border: 38 26% 83%;
+    --ring: 166 69% 23%;
+    --success: 142 64% 35%;
+    --warning: 33 96% 52%;
+    --danger: 0 72% 52%;
+    --chart-1: 166 69% 32%;
+    --chart-2: 28 90% 60%;
+    --chart-3: 196 80% 48%;
+    --chart-4: 344 77% 58%;
+    --font-sans: "Manrope", sans-serif;
+    --font-display: "Space Grotesk", sans-serif;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(255, 205, 120, 0.28), transparent 24rem),
+      radial-gradient(circle at top right, rgba(54, 152, 122, 0.22), transparent 22rem),
+      linear-gradient(180deg, rgba(255, 250, 242, 0.96), rgba(249, 246, 236, 0.98));
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

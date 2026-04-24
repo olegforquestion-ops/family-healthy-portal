@@ -36,6 +36,8 @@ Make sure repository contains:
 
 \- AGENTS.md
 
+\- TECH\_SPEC\_MVP.md
+
 \- STACK\_DECISION.md
 
 \- ROADMAP\_MVP.md

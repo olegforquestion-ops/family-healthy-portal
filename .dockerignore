@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.gitignore
+coverage
+dist
+build
+*.log
+.env
+.env.local
+.env.production
+Dockerfile*
+compose*.yml
+compose*.yaml
+README_DEPLOY_UBUNTU.md
