@@ -2,6 +2,10 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 
+<<<<<<< HEAD
+=======
+import { authConfig } from "@/auth.config";
+>>>>>>> 6594672 (Исправление контейнера)
 import { env } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/password";
@@ -12,6 +16,7 @@ const credentialsSchema = z.object({
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+<<<<<<< HEAD
   trustHost: true,
   secret: env.AUTH_SECRET,
   session: {
@@ -50,6 +55,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
+=======
+  ...authConfig,
+  secret: env.AUTH_SECRET,
+>>>>>>> 6594672 (Исправление контейнера)
   providers: [
     Credentials({
       name: "credentials",
