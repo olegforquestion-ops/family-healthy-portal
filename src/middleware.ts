@@ -1,14 +1,9 @@
 import { NextResponse } from "next/server";
-<<<<<<< HEAD
-
-import { auth } from "@/auth";
-=======
 import NextAuth from "next-auth";
 
 import { authConfig } from "@/auth.config";
 
 const { auth } = NextAuth(authConfig);
->>>>>>> 6594672 (Исправление контейнера)
 
 const publicPaths = ["/login"];
 

@@ -2,10 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 
-<<<<<<< HEAD
-=======
 import { authConfig } from "@/auth.config";
->>>>>>> 6594672 (Исправление контейнера)
 import { env } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/password";
@@ -16,49 +13,8 @@ const credentialsSchema = z.object({
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-<<<<<<< HEAD
-  trustHost: true,
-  secret: env.AUTH_SECRET,
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/login",
-  },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.login = user.login;
-        token.role = user.role;
-        token.status = user.status;
-        token.familyId = user.familyId;
-      } else if (token.sub && !token.familyId) {
-        const dbUser = await prisma.user.findUnique({
-          where: { id: token.sub },
-          select: { familyId: true },
-        });
-
-        token.familyId = dbUser?.familyId;
-      }
-
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user && token.sub) {
-        session.user.id = token.sub;
-        session.user.login = token.login || "";
-        session.user.role = (token.role as "ADMIN" | "MEMBER") || "MEMBER";
-        session.user.status = (token.status as "ACTIVE" | "INACTIVE") || "ACTIVE";
-        session.user.familyId = (token.familyId as string) || "";
-      }
-
-      return session;
-    },
-  },
-=======
   ...authConfig,
   secret: env.AUTH_SECRET,
->>>>>>> 6594672 (Исправление контейнера)
   providers: [
     Credentials({
       name: "credentials",

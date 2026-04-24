@@ -56,7 +56,7 @@ export function AppShell({ children, session }: AppShellProps) {
   }
 
   const role = session?.user.role ?? "MEMBER";
-  const filteredNav = navItems.filter((item) => item.roles.includes(role));
+  const filteredNav = navItems.filter((item) => item.roles.some((itemRole) => itemRole === role));
 
   return (
     <div className="min-h-screen">
