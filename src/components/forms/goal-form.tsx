@@ -2,10 +2,10 @@
 
 import { useActionState, useEffect, useState } from "react";
 
-import { createGoalAction } from "@/modules/goals/actions";
+import { createGoalAction, type GoalActionState } from "@/modules/goals/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: GoalActionState = {};
 
 type GoalTemplateOption = {
   code: string;
