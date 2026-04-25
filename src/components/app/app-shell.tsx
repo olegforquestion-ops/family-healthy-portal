@@ -16,9 +16,9 @@ import {
   Users,
 } from "lucide-react";
 
-import { logoutAction } from "@/modules/auth/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { logoutAction } from "@/modules/auth/actions";
 import { cn } from "@/lib/utils";
 
 type AppShellProps = {
@@ -41,21 +41,27 @@ type NavItem = {
   label: string;
   icon: typeof LayoutDashboard;
   roles: Role[];
+  mobilePrimary?: boolean;
 };
 
 const navItems: NavItem[] = [
-  { href: "/dashboard", label: "Главная", icon: LayoutDashboard, roles: ["ADMIN", "MEMBER"] },
+  { href: "/dashboard", label: "Сегодня", icon: LayoutDashboard, roles: ["ADMIN", "MEMBER"], mobilePrimary: true },
+  { href: "/nutrition", label: "Питание", icon: NotebookPen, roles: ["ADMIN", "MEMBER"], mobilePrimary: true },
+  { href: "/water", label: "Вода", icon: Droplets, roles: ["ADMIN", "MEMBER"], mobilePrimary: true },
+  { href: "/workouts", label: "Тренировки", icon: Dumbbell, roles: ["ADMIN", "MEMBER"], mobilePrimary: true },
   { href: "/profile", label: "Профиль", icon: UserSquare2, roles: ["ADMIN", "MEMBER"] },
   { href: "/measurements", label: "Вес и замеры", icon: Ruler, roles: ["ADMIN", "MEMBER"] },
   { href: "/foods", label: "База продуктов", icon: Apple, roles: ["ADMIN", "MEMBER"] },
-  { href: "/nutrition", label: "Питание", icon: NotebookPen, roles: ["ADMIN", "MEMBER"] },
-  { href: "/water", label: "Вода", icon: Droplets, roles: ["ADMIN", "MEMBER"] },
-  { href: "/workouts", label: "Тренировки", icon: Dumbbell, roles: ["ADMIN", "MEMBER"] },
   { href: "/goals", label: "Цели", icon: Flag, roles: ["ADMIN", "MEMBER"] },
   { href: "/family", label: "Семья", icon: Users, roles: ["ADMIN"] },
   { href: "/admin/users", label: "Пользователи", icon: Users, roles: ["ADMIN"] },
   { href: "/admin/users/new", label: "Создать пользователя", icon: ShieldCheck, roles: ["ADMIN"] },
 ];
+
+function getCurrentSection(pathname: string) {
+  const match = navItems.find((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
+  return match?.label ?? "Раздел";
+}
 
 export function AppShell({ children, session }: AppShellProps) {
   const pathname = usePathname();
@@ -65,9 +71,10 @@ export function AppShell({ children, session }: AppShellProps) {
   }
 
   const role = session?.user.role ?? "MEMBER";
-  const filteredNav = navItems.filter((item) => item.roles.some((itemRole) => itemRole === role));
-  const mobilePrimaryNav = filteredNav.slice(0, 5);
-  const mobileSecondaryNav = filteredNav.slice(5);
+  const filteredNav = navItems.filter((item) => item.roles.includes(role));
+  const mobilePrimaryNav = filteredNav.filter((item) => item.mobilePrimary);
+  const mobileSecondaryNav = filteredNav.filter((item) => !item.mobilePrimary);
+  const sectionLabel = getCurrentSection(pathname);
 
   return (
     <div className="min-h-screen">
@@ -76,7 +83,7 @@ export function AppShell({ children, session }: AppShellProps) {
           <div className="rounded-[1.75rem] border border-white/70 bg-[linear-gradient(160deg,rgba(8,87,67,0.96),rgba(28,138,106,0.9))] p-6 text-white shadow-soft">
             <div className="space-y-2">
               <p className="font-display text-2xl font-semibold leading-tight">Семейный портал для здорового образа жизни</p>
-              <p className="max-w-xs text-sm text-white/75">Все привычки, питание, вода, тренировки и цели в одном месте.</p>
+              <p className="max-w-xs text-sm text-white/75">Ежедневные привычки, питание, вода, тренировки и цели в одном месте.</p>
             </div>
           </div>
 
@@ -87,7 +94,7 @@ export function AppShell({ children, session }: AppShellProps) {
             <div className="space-y-1">
               {filteredNav.map((item) => {
                 const Icon = item.icon;
-                const active = pathname === item.href;
+                const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
                 return (
                   <Link
@@ -112,7 +119,8 @@ export function AppShell({ children, session }: AppShellProps) {
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Текущий раздел</p>
-                <p className="font-display text-lg font-semibold leading-tight sm:text-xl lg:text-[1.7rem]">Ваши привычки, цели и общая картина дня</p>
+                <p className="font-display text-lg font-semibold leading-tight sm:text-xl lg:text-[1.7rem]">{sectionLabel}</p>
+                <p className="mt-1 hidden text-sm text-muted-foreground sm:block">На телефоне упор на быстрые действия дня, на десктопе доступен полный рабочий режим.</p>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -131,45 +139,27 @@ export function AppShell({ children, session }: AppShellProps) {
               </div>
             </div>
 
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-1 xl:hidden">
-              {mobilePrimaryNav.map((item) => {
-                const Icon = item.icon;
-                const active = pathname === item.href;
-
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium transition-colors",
-                      active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background hover:bg-muted",
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-
             {mobileSecondaryNav.length ? (
-              <div className="mt-2 flex gap-2 overflow-x-auto pb-1 xl:hidden">
-                {mobileSecondaryNav.map((item) => {
-                  const active = pathname === item.href;
+              <div className="mt-4 xl:hidden">
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Еще</p>
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {mobileSecondaryNav.map((item) => {
+                    const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={cn(
-                        "inline-flex shrink-0 rounded-full border px-3 py-2 text-sm transition-colors",
-                        active ? "border-primary bg-primary/10 text-primary" : "border-border bg-background text-muted-foreground hover:bg-muted",
-                      )}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "inline-flex shrink-0 rounded-full border px-3 py-2 text-sm transition-colors",
+                          active ? "border-primary bg-primary/10 text-primary" : "border-border bg-background text-muted-foreground hover:bg-muted",
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
             ) : null}
           </header>
@@ -182,7 +172,7 @@ export function AppShell({ children, session }: AppShellProps) {
         <div className="mx-auto flex max-w-[760px] items-center justify-between gap-1">
           {mobilePrimaryNav.map((item) => {
             const Icon = item.icon;
-            const active = pathname === item.href;
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             return (
               <Link

@@ -18,6 +18,10 @@ const createFoodSchema = z.object({
   carbsPer100g: z.coerce.number().min(0, "Углеводы не могут быть отрицательными."),
 });
 
+const deleteFoodSchema = z.object({
+  foodId: z.string().min(1, "Не удалось определить запись для удаления."),
+});
+
 export type FoodActionState = {
   error?: string;
   success?: string;
@@ -59,4 +63,26 @@ export async function createFoodAction(_prevState: FoodActionState, formData: Fo
   revalidatePath("/nutrition/draft");
 
   return { success: "Запись добавлена в общую базу продуктов." };
+}
+
+export async function deleteFoodAction(formData: FormData): Promise<void> {
+  await requireSession();
+
+  const parsed = deleteFoodSchema.safeParse({
+    foodId: formData.get("foodId"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Не удалось удалить запись.");
+  }
+
+  await prisma.foodItem.update({
+    where: { id: parsed.data.foodId },
+    data: {
+      isActive: false,
+    },
+  });
+
+  revalidatePath("/foods");
+  revalidatePath("/nutrition/draft");
 }

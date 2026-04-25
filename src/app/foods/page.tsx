@@ -1,8 +1,10 @@
-import { requireSession } from "@/lib/session";
-import { listFoodItems } from "@/modules/foods/queries";
+import { DeleteFoodButton } from "@/components/foods/delete-food-button";
 import { FoodItemForm } from "@/components/forms/food-item-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireSession } from "@/lib/session";
+import { deleteFoodAction } from "@/modules/foods/actions";
+import { listFoodItems } from "@/modules/foods/queries";
 
 export default async function FoodsPage() {
   await requireSession();
@@ -13,9 +15,7 @@ export default async function FoodsPage() {
       <div className="space-y-2">
         <Badge>База продуктов</Badge>
         <h1 className="font-display text-3xl font-semibold">Общая база продуктов и блюд</h1>
-        <p className="max-w-3xl text-muted-foreground">
-          Здесь собраны продукты и блюда, которые можно быстро выбирать при заполнении дневника питания.
-        </p>
+        <p className="max-w-3xl text-muted-foreground">Здесь собраны продукты и блюда, которые можно быстро выбирать при заполнении дневника питания.</p>
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
@@ -46,16 +46,15 @@ export default async function FoodsPage() {
                   <th className="px-3 py-3">Ж</th>
                   <th className="px-3 py-3">У</th>
                   <th className="px-3 py-3">Автор</th>
+                  <th className="px-3 py-3">Действие</th>
                 </tr>
               </thead>
               <tbody>
                 {foods.map((food) => (
-                  <tr key={food.id} className="border-b border-border/70">
+                  <tr key={food.id} className="border-b border-border/70 align-top">
                     <td className="px-3 py-4 font-semibold">{food.name}</td>
                     <td className="px-3 py-4">
-                      <Badge variant={food.type === "DISH" ? "warning" : "secondary"}>
-                        {food.type === "DISH" ? "Блюдо" : "Продукт"}
-                      </Badge>
+                      <Badge variant={food.type === "DISH" ? "warning" : "secondary"}>{food.type === "DISH" ? "Блюдо" : "Продукт"}</Badge>
                     </td>
                     <td className="px-3 py-4 text-muted-foreground">{food.portionLabel ?? "100 г"}</td>
                     <td className="px-3 py-4">{food.caloriesPer100g.toString()}</td>
@@ -63,6 +62,12 @@ export default async function FoodsPage() {
                     <td className="px-3 py-4">{food.fatPer100g.toString()}</td>
                     <td className="px-3 py-4">{food.carbsPer100g.toString()}</td>
                     <td className="px-3 py-4 text-muted-foreground">{food.createdBy?.displayName ?? "Справочник"}</td>
+                    <td className="px-3 py-4">
+                      <form action={deleteFoodAction}>
+                        <input type="hidden" name="foodId" value={food.id} />
+                        <DeleteFoodButton foodName={food.name} />
+                      </form>
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -23,13 +23,60 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
       <div className="space-y-2">
         <Badge>Вода</Badge>
         <h1 className="font-display text-3xl font-semibold">Вода</h1>
-        <p className="max-w-3xl text-muted-foreground">
-          Удобный способ отмечать выпитую воду в течение дня и сразу видеть общий прогресс.
-        </p>
+        <p className="max-w-3xl text-muted-foreground">На мобильном это быстрый экран: отметить объем, увидеть прогресс и не утонуть в лишних деталях.</p>
         <p className="text-sm text-muted-foreground">Дата просмотра: {data.date.toLocaleDateString("ru-RU")}</p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+      <div className="grid gap-4 lg:hidden">
+        <Card className="overflow-hidden border-none bg-[linear-gradient(160deg,rgba(227,245,245,0.96),rgba(255,255,255,0.92))]">
+          <CardHeader>
+            <CardTitle>Прогресс по воде</CardTitle>
+            <CardDescription>Главный мобильный сценарий: нажать, сохранить и сразу увидеть результат.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <div className="rounded-[1.5rem] bg-white/85 p-5">
+              <p className="font-display text-5xl font-semibold">{(data.totalMl / 1000).toFixed(2)} л</p>
+              <p className="mt-2 text-sm text-muted-foreground">Цель: {data.targetMl ? `${(data.targetMl / 1000).toFixed(2)} л` : "не задана"}</p>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Выполнение</span>
+                <span>{progress}%</span>
+              </div>
+              <Progress value={progress} />
+            </div>
+
+            <WaterEntryForm />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Последние записи</CardTitle>
+            <CardDescription>Небольшая лента вместо громоздкой таблицы.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {data.entries.length ? (
+              data.entries.map((entry) => (
+                <div key={entry.id} className="rounded-[1.25rem] border border-border bg-background/70 p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="font-semibold">{entry.amountMl} мл</p>
+                      <p className="text-sm text-muted-foreground">{new Date(entry.recordedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}</p>
+                    </div>
+                    {entry.note ? <p className="max-w-[45%] text-right text-sm text-muted-foreground">{entry.note}</p> : null}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">За выбранный день записей воды пока нет. Начните с одного быстрого объема.</div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="hidden gap-6 xl:grid-cols-[0.9fr_1.1fr] lg:grid">
         <Card>
           <CardHeader>
             <CardTitle>Прогресс по воде</CardTitle>
@@ -38,17 +85,13 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
           <CardContent className="space-y-5">
             <div className="rounded-[1.25rem] bg-muted/60 p-5">
               <p className="font-display text-4xl">{(data.totalMl / 1000).toFixed(2)} л</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Цель: {data.targetMl ? `${(data.targetMl / 1000).toFixed(2)} л` : "не задана"}
-              </p>
+              <p className="mt-2 text-sm text-muted-foreground">Цель: {data.targetMl ? `${(data.targetMl / 1000).toFixed(2)} л` : "не задана"}</p>
             </div>
 
             <Progress value={progress} />
 
             {!data.targetMl ? (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
-                У пользователя пока не задана норма воды. Ее можно указать в профиле, чтобы видеть процент выполнения.
-              </div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">У пользователя пока не задана норма воды. Ее можно указать в профиле, чтобы видеть процент выполнения.</div>
             ) : null}
 
             <WaterEntryForm />
@@ -58,7 +101,7 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
         <Card>
           <CardHeader>
             <CardTitle>Лента записей</CardTitle>
-            <CardDescription>Записи сохраняются по датам, поэтому легко отследить привычку день за днем.</CardDescription>
+            <CardDescription>Записи сохраняются по датам, поэтому легко отслеживать привычку день за днем.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {data.entries.length ? (
@@ -74,9 +117,7 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
                 </div>
               ))
             ) : (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
-                За выбранный день записей воды пока нет. Добавьте первый объем через быстрые кнопки или вручную.
-              </div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">За выбранный день записей воды пока нет. Добавьте первый объем через быстрые кнопки или вручную.</div>
             )}
           </CardContent>
         </Card>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Apple, Droplets, Dumbbell, Plus, Ruler } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,31 @@ export default async function DashboardPage() {
   const data = await getPersonalDashboardData(session.user.id);
   const currentNorm = data.profile?.nutritionNormSnapshots[0];
   const latestWeight = data.profile?.weightEntries[0];
+  const recentActivity = [
+    ...data.nutrition.meals.map((meal) => ({
+      id: `meal-${meal.id}`,
+      label: meal.items[0]?.foodItem.name ?? "Прием пищи",
+      meta: `${new Date(meal.consumedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })} • ${meal.totalCalories} ккал`,
+      recordedAt: new Date(meal.consumedAt).getTime(),
+      type: "Питание",
+    })),
+    ...data.water.entries.map((entry) => ({
+      id: `water-${entry.id}`,
+      label: `${entry.amountMl} мл воды`,
+      meta: new Date(entry.recordedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" }),
+      recordedAt: new Date(entry.recordedAt).getTime(),
+      type: "Вода",
+    })),
+    ...data.workouts.entries.map((entry) => ({
+      id: `workout-${entry.id}`,
+      label: entry.activityName,
+      meta: `${new Date(entry.performedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })} • ${entry.caloriesBurned} ккал`,
+      recordedAt: new Date(entry.performedAt).getTime(),
+      type: "Тренировка",
+    })),
+  ]
+    .sort((a, b) => b.recordedAt - a.recordedAt)
+    .slice(0, 4);
 
   return (
     <div className="space-y-6">
@@ -19,13 +45,131 @@ export default async function DashboardPage() {
         <Badge variant={session.user.role === "ADMIN" ? "success" : "secondary"}>
           {session.user.role === "ADMIN" ? "Роль: администратор" : "Роль: пользователь"}
         </Badge>
-        <h1 className="font-display text-3xl font-semibold">Личный обзор</h1>
-        <p className="max-w-3xl text-muted-foreground">
-          Здесь собраны самые важные показатели за день и неделю, чтобы было проще следить за привычками, самочувствием и текущими целями.
-        </p>
+        <h1 className="font-display text-3xl font-semibold">Сегодня</h1>
+        <p className="max-w-3xl text-muted-foreground">Главный экран для телефона: быстро занести еду, воду и тренировку, а затем сразу увидеть картину дня.</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4 lg:gap-6">
+      <div className="grid gap-4 lg:hidden">
+        <Card className="overflow-hidden border-none bg-[linear-gradient(160deg,rgba(252,236,197,0.96),rgba(255,255,255,0.92))]">
+          <CardHeader>
+            <CardTitle>Быстрые действия дня</CardTitle>
+            <CardDescription>Три главных сценария мобильного режима и быстрый доступ к весу и замерам.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            <Link href="/nutrition/draft" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
+              <div className="flex items-center gap-3">
+                <Apple className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-semibold">Добавить еду</p>
+                  <p className="text-sm text-muted-foreground">Черновик приема пищи</p>
+                </div>
+              </div>
+            </Link>
+            <Link href="/water" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
+              <div className="flex items-center gap-3">
+                <Droplets className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-semibold">Добавить воду</p>
+                  <p className="text-sm text-muted-foreground">Быстрые объемы и итог дня</p>
+                </div>
+              </div>
+            </Link>
+            <Link href="/workouts" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
+              <div className="flex items-center gap-3">
+                <Dumbbell className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-semibold">Добавить тренировку</p>
+                  <p className="text-sm text-muted-foreground">По нормативу или вручную</p>
+                </div>
+              </div>
+            </Link>
+            <Link href="/measurements" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
+              <div className="flex items-center gap-3">
+                <Ruler className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-semibold">Вес и замеры</p>
+                  <p className="text-sm text-muted-foreground">Быстрая фиксация прогресса</p>
+                </div>
+              </div>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Card>
+            <CardContent className="space-y-1 pt-4">
+              <p className="text-sm text-muted-foreground">Калории</p>
+              <p className="font-display text-3xl font-semibold">{data.nutrition.totals.calories.toFixed(0)}</p>
+              <p className="text-sm text-muted-foreground">из {currentNorm ? `${currentNorm.dailyCalories} ккал` : "без цели"}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="space-y-1 pt-4">
+              <p className="text-sm text-muted-foreground">Вода</p>
+              <p className="font-display text-3xl font-semibold">{data.water.totalMl}</p>
+              <p className="text-sm text-muted-foreground">из {data.water.targetMl ?? 0} мл</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="space-y-1 pt-4">
+              <p className="text-sm text-muted-foreground">Тренировки</p>
+              <p className="font-display text-3xl font-semibold">{data.workouts.entries.length}</p>
+              <p className="text-sm text-muted-foreground">{data.workouts.totalCalories.toFixed(0)} ккал</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Прогресс за день</CardTitle>
+            <CardDescription>Ключевые показатели, которые должны быть видны сразу без переходов по страницам.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {[
+              ["Калории", data.nutrition.totals.calories, data.nutrition.norm?.dailyCalories ?? 0, data.summary.caloriesPercent],
+              ["Вода", data.water.totalMl, data.water.targetMl ?? 0, data.summary.waterPercent],
+            ].map(([label, actual, target, percent]) => (
+              <div key={label as string} className="space-y-2">
+                <div className="flex justify-between gap-4 text-sm">
+                  <span>{label as string}</span>
+                  <span>
+                    {Number(actual).toFixed(0)} / {Number(target).toFixed(0)}
+                  </span>
+                </div>
+                <Progress value={Number(percent)} />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Последние действия</CardTitle>
+            <CardDescription>Небольшая лента помогает убедиться, что записи действительно попали в систему.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {recentActivity.length ? (
+              recentActivity.map((item) => (
+                <div key={item.id} className="rounded-[1.25rem] bg-muted/60 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold">{item.label}</p>
+                      <p className="text-sm text-muted-foreground">{item.meta}</p>
+                    </div>
+                    <Badge variant="secondary">{item.type}</Badge>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
+                За сегодня пока нет записей. Начните с еды, воды или тренировки.
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="hidden gap-4 sm:grid-cols-2 2xl:grid-cols-4 lg:grid lg:gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Текущий вес</CardTitle>
@@ -39,9 +183,7 @@ export default async function DashboardPage() {
             <CardTitle>Норма калорий</CardTitle>
             <CardDescription>Рекомендуемый ориентир на день.</CardDescription>
           </CardHeader>
-          <CardContent className="text-3xl font-semibold">
-            {currentNorm ? `${currentNorm.dailyCalories} ккал` : "Заполните профиль"}
-          </CardContent>
+          <CardContent className="text-3xl font-semibold">{currentNorm ? `${currentNorm.dailyCalories} ккал` : "Заполните профиль"}</CardContent>
         </Card>
 
         <Card>
@@ -61,7 +203,7 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-6">
+      <div className="hidden gap-4 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:grid lg:gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Сегодняшний день</CardTitle>
@@ -83,16 +225,14 @@ export default async function DashboardPage() {
               </div>
             ))}
 
-            <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
-              Сожжено на тренировках сегодня: {data.workouts.totalCalories.toFixed(0)} ккал
-            </div>
+            <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">Сожжено на тренировках сегодня: {data.workouts.totalCalories.toFixed(0)} ккал</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle>Прогресс по целям</CardTitle>
-            <CardDescription>Помогает быстро увидеть, что уже получается хорошо, а чему стоит уделить внимание.</CardDescription>
+            <CardDescription>Быстрый обзор текущих и завершенных целей.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-[1.25rem] bg-muted/60 p-4">
@@ -125,25 +265,23 @@ export default async function DashboardPage() {
                 </div>
               ))
             ) : (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
-                Целей пока нет. Добавьте первую цель, чтобы видеть прогресс и маленькие победы прямо на главной странице.
-              </div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">Целей пока нет. Добавьте первую цель, чтобы видеть прогресс на главной.</div>
             )}
           </CardContent>
         </Card>
       </div>
 
-      <Card>
+      <Card className="hidden lg:block">
         <CardHeader>
           <CardTitle>Быстрые переходы</CardTitle>
           <CardDescription>Основные разделы всегда под рукой.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
-          <Link href="/goals">
-            <Button>Открыть цели</Button>
-          </Link>
-          <Link href="/nutrition">
-            <Button variant="outline">Открыть питание</Button>
+          <Link href="/nutrition/draft">
+            <Button>
+              <Plus className="h-4 w-4" />
+              Добавить прием пищи
+            </Button>
           </Link>
           <Link href="/water">
             <Button variant="outline">Открыть воду</Button>
@@ -151,9 +289,12 @@ export default async function DashboardPage() {
           <Link href="/workouts">
             <Button variant="outline">Открыть тренировки</Button>
           </Link>
+          <Link href="/measurements">
+            <Button variant="outline">Вес и замеры</Button>
+          </Link>
           {session.user.role === "ADMIN" ? (
             <Link href="/family">
-              <Button variant="outline">Открыть семейный обзор</Button>
+              <Button variant="outline">Семейный обзор</Button>
             </Link>
           ) : null}
         </CardContent>
