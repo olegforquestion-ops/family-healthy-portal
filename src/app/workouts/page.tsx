@@ -27,27 +27,27 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
       <div className="space-y-2">
         <Badge>Тренировки</Badge>
         <h1 className="font-display text-3xl font-semibold">Тренировки</h1>
-        <p className="max-w-3xl text-muted-foreground">
+        <p className="max-w-4xl text-muted-foreground">
           Здесь можно быстро добавить тренировку вручную или выбрать готовый вариант из списка, чтобы видеть свою активность за день.
         </p>
         <p className="text-sm text-muted-foreground">Дата просмотра: {data.date.toLocaleDateString("ru-RU")}</p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <div className="space-y-6">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] xl:gap-6 2xl:grid-cols-[minmax(0,1.02fr)_minmax(0,1.22fr)]">
+        <div className="space-y-4 lg:space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Итог за день</CardTitle>
               <CardDescription>Быстрый обзор по всем сохраненным тренировкам за выбранную дату.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-[1.25rem] bg-muted/60 p-5">
-                  <p className="font-display text-4xl">{data.totalCalories.toFixed(0)}</p>
+              <div className="grid gap-3 sm:grid-cols-2 lg:gap-4">
+                <div className="rounded-[1.25rem] bg-muted/60 p-4 sm:p-5">
+                  <p className="font-display text-3xl sm:text-4xl">{data.totalCalories.toFixed(0)}</p>
                   <p className="mt-2 text-sm text-muted-foreground">ккал сожжено</p>
                 </div>
-                <div className="rounded-[1.25rem] bg-muted/60 p-5">
-                  <p className="font-display text-4xl">{data.entries.length}</p>
+                <div className="rounded-[1.25rem] bg-muted/60 p-4 sm:p-5">
+                  <p className="font-display text-3xl sm:text-4xl">{data.entries.length}</p>
                   <p className="mt-2 text-sm text-muted-foreground">тренировок за день</p>
                 </div>
               </div>
@@ -81,7 +81,7 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
           ) : null}
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 lg:space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>История тренировок</CardTitle>
@@ -91,9 +91,9 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
               {data.entries.length ? (
                 data.entries.map((entry) => (
                   <div key={entry.id} className="rounded-[1.25rem] border border-border bg-background/70 p-4">
-                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
                           <p className="font-semibold">{entry.activityName}</p>
                           <Badge variant="secondary">{methodLabels[entry.method]}</Badge>
                         </div>
@@ -105,7 +105,7 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
                         ) : null}
                         {entry.note ? <p className="text-sm text-muted-foreground">{entry.note}</p> : null}
                       </div>
-                      <div className="text-right">
+                      <div className="text-left sm:text-right">
                         <p className="font-semibold">{entry.caloriesBurned.toString()} ккал</p>
                         {entry.durationMinutes ? <p className="text-sm text-muted-foreground">{entry.durationMinutes} мин</p> : null}
                       </div>
@@ -127,16 +127,14 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
             </CardHeader>
             <CardContent className="space-y-3">
               {data.norms.map((norm) => (
-                <div key={norm.id} className="flex items-center justify-between rounded-[1.25rem] bg-muted/60 p-4">
+                <div key={norm.id} className="flex flex-col gap-2 rounded-[1.25rem] bg-muted/60 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="font-semibold">{norm.name}</p>
                     <p className="text-sm text-muted-foreground">За {norm.unitLabel}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-left sm:text-right">
                     <p className="font-semibold">{norm.caloriesPerUnit.toString()} ккал</p>
-                    {norm.defaultQuantity ? (
-                      <p className="text-sm text-muted-foreground">По умолчанию: {norm.defaultQuantity.toString()}</p>
-                    ) : null}
+                    {norm.defaultQuantity ? <p className="text-sm text-muted-foreground">По умолчанию: {norm.defaultQuantity.toString()}</p> : null}
                   </div>
                 </div>
               ))}

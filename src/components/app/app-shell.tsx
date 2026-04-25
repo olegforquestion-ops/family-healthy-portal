@@ -61,7 +61,7 @@ export function AppShell({ children, session }: AppShellProps) {
   const pathname = usePathname();
 
   if (pathname.startsWith("/login")) {
-    return <div className="mx-auto min-h-screen max-w-[1600px] px-4 py-6 lg:px-6">{children}</div>;
+    return <div className="mx-auto min-h-screen max-w-[1920px] px-4 py-6 lg:px-6">{children}</div>;
   }
 
   const role = session?.user.role ?? "MEMBER";
@@ -71,11 +71,12 @@ export function AppShell({ children, session }: AppShellProps) {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto flex max-w-[1600px] gap-4 px-3 py-3 sm:px-4 sm:py-4 lg:gap-6 lg:px-6">
-        <aside className="hidden w-80 shrink-0 flex-col gap-6 lg:flex">
+      <div className="mx-auto flex max-w-[1920px] gap-4 px-3 py-3 sm:px-4 sm:py-4 xl:gap-8 xl:px-6">
+        <aside className="hidden w-72 shrink-0 flex-col gap-5 xl:flex">
           <div className="rounded-[1.75rem] border border-white/70 bg-[linear-gradient(160deg,rgba(8,87,67,0.96),rgba(28,138,106,0.9))] p-6 text-white shadow-soft">
             <div className="space-y-2">
-              <p className="font-display text-xl font-semibold">Семейный портал для здорового образа жизни</p>
+              <p className="font-display text-2xl font-semibold leading-tight">Семейный портал для здорового образа жизни</p>
+              <p className="max-w-xs text-sm text-white/75">Все привычки, питание, вода, тренировки и цели в одном месте.</p>
             </div>
           </div>
 
@@ -106,12 +107,12 @@ export function AppShell({ children, session }: AppShellProps) {
           </nav>
         </aside>
 
-        <main className="min-w-0 flex-1 pb-24 lg:pb-0">
-          <header className="mb-4 rounded-[1.5rem] border border-white/70 bg-card/80 p-3 shadow-soft backdrop-blur sm:mb-6 sm:p-4">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <main className="min-w-0 flex-1 pb-24 xl:pb-0">
+          <header className="mb-4 rounded-[1.5rem] border border-white/70 bg-card/80 p-3 shadow-soft backdrop-blur sm:mb-5 sm:p-4 lg:p-5">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Текущий раздел</p>
-                <p className="font-display text-lg font-semibold sm:text-xl">Ваши привычки, цели и общая картина дня</p>
+                <p className="font-display text-lg font-semibold leading-tight sm:text-xl lg:text-[1.7rem]">Ваши привычки, цели и общая картина дня</p>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -130,7 +131,7 @@ export function AppShell({ children, session }: AppShellProps) {
               </div>
             </div>
 
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-1 xl:hidden">
               {mobilePrimaryNav.map((item) => {
                 const Icon = item.icon;
                 const active = pathname === item.href;
@@ -152,7 +153,7 @@ export function AppShell({ children, session }: AppShellProps) {
             </div>
 
             {mobileSecondaryNav.length ? (
-              <div className="mt-2 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+              <div className="mt-2 flex gap-2 overflow-x-auto pb-1 xl:hidden">
                 {mobileSecondaryNav.map((item) => {
                   const active = pathname === item.href;
 
@@ -173,12 +174,12 @@ export function AppShell({ children, session }: AppShellProps) {
             ) : null}
           </header>
 
-          <div className="space-y-6">{children}</div>
+          <div className="space-y-5 lg:space-y-6">{children}</div>
         </main>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-white/70 bg-background/95 px-2 py-2 shadow-soft backdrop-blur lg:hidden">
-        <div className="mx-auto flex max-w-[720px] items-center justify-between gap-1">
+      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-white/70 bg-background/95 px-2 py-2 shadow-soft backdrop-blur xl:hidden">
+        <div className="mx-auto flex max-w-[760px] items-center justify-between gap-1">
           {mobilePrimaryNav.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;

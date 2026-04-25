@@ -2,8 +2,8 @@
 
 import { useActionState } from "react";
 
-import { addMeasurementAction, type MeasurementActionState } from "@/modules/measurements/actions";
 import { Button } from "@/components/ui/button";
+import { addMeasurementAction, type MeasurementActionState } from "@/modules/measurements/actions";
 
 const initialState: MeasurementActionState = {};
 
@@ -25,27 +25,32 @@ export function MeasurementEntryForm() {
           <option value="THIGH">Нога</option>
         </select>
       </div>
+
       <div className="space-y-2">
         <label className="text-sm font-semibold" htmlFor="valueCm">
           Значение, см
         </label>
         <input id="valueCm" name="valueCm" type="number" step="0.1" required className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm" />
       </div>
+
       <div className="space-y-2">
         <label className="text-sm font-semibold" htmlFor="measurementRecordedAt">
           Дата
         </label>
         <input id="measurementRecordedAt" name="recordedAt" type="date" defaultValue={today} required className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm" />
       </div>
+
       <div className="space-y-2">
         <label className="text-sm font-semibold" htmlFor="measurementNote">
           Комментарий
         </label>
         <input id="measurementNote" name="note" className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm" />
       </div>
+
       {state?.error ? <p className="text-sm text-danger">{state.error}</p> : null}
       {state?.success ? <p className="text-sm text-success">{state.success}</p> : null}
-      <Button type="submit" disabled={pending}>
+
+      <Button className="w-full sm:w-auto" type="submit" disabled={pending}>
         {pending ? "Сохраняем..." : "Добавить замер"}
       </Button>
     </form>

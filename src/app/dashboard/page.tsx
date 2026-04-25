@@ -25,7 +25,7 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+      <div className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4 lg:gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Текущий вес</CardTitle>
@@ -61,7 +61,7 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[1fr_1fr] lg:gap-6">
+      <div className="grid gap-4 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Сегодняшний день</CardTitle>

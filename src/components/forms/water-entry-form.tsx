@@ -2,8 +2,8 @@
 
 import { useActionState } from "react";
 
-import { createWaterEntryAction, type WaterEntryActionState } from "@/modules/water/actions";
 import { Button } from "@/components/ui/button";
+import { createWaterEntryAction, type WaterEntryActionState } from "@/modules/water/actions";
 
 const initialState: WaterEntryActionState = {};
 
@@ -21,13 +21,13 @@ export function WaterEntryForm() {
     <form action={formAction} className="space-y-4">
       <div className="grid gap-2 sm:grid-cols-3">
         {[250, 500, 750].map((amount) => (
-          <Button key={amount} type="submit" name="quickAmountMl" value={amount} variant="secondary" disabled={pending}>
+          <Button key={amount} className="w-full" type="submit" name="quickAmountMl" value={amount} variant="secondary" disabled={pending}>
             + {amount} мл
           </Button>
         ))}
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <label className="text-sm font-semibold" htmlFor="water-amount">
             Объем, мл
@@ -72,7 +72,7 @@ export function WaterEntryForm() {
       {state?.error ? <p className="text-sm text-danger">{state.error}</p> : null}
       {state?.success ? <p className="text-sm text-success">{state.success}</p> : null}
 
-      <Button type="submit" disabled={pending}>
+      <Button className="w-full sm:w-auto" type="submit" disabled={pending}>
         {pending ? "Сохраняем..." : "Добавить воду"}
       </Button>
     </form>

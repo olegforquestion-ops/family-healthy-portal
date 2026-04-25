@@ -13,9 +13,9 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6">
+    <div className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr] lg:gap-6 xl:gap-8">
       <Card className="overflow-hidden border-none bg-[linear-gradient(160deg,rgba(252,236,197,0.96),rgba(255,255,255,0.9))]">
-        <CardContent className="flex min-h-[420px] flex-col justify-between p-5 sm:p-6 md:min-h-[540px] md:p-10">
+        <CardContent className="flex min-h-[380px] flex-col justify-between p-5 sm:p-6 md:min-h-[540px] md:p-10">
           <div className="space-y-6">
             <Badge variant="secondary">Core MVP</Badge>
             <div className="space-y-3">

@@ -2,8 +2,8 @@
 
 import { useActionState, useState } from "react";
 
-import { saveProfileAction, type ProfileActionState } from "@/modules/profiles/actions";
 import { Button } from "@/components/ui/button";
+import { saveProfileAction, type ProfileActionState } from "@/modules/profiles/actions";
 
 const initialState: ProfileActionState = {};
 
@@ -33,7 +33,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   const [normMode, setNormMode] = useState<"AUTO" | "MANUAL">("AUTO");
 
   return (
-    <form action={formAction} className="grid gap-4 md:grid-cols-2">
+    <form action={formAction} className="grid gap-4 sm:grid-cols-2">
       <div className="space-y-2">
         <label className="text-sm font-semibold" htmlFor="firstName">
           Имя
@@ -127,13 +127,13 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         <input id="waterTargetMl" name="waterTargetMl" type="number" defaultValue={profile.waterTargetMl} className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm" />
       </div>
 
-      <div className="space-y-3 rounded-[1.5rem] border border-border bg-muted/40 p-4 md:col-span-2">
+      <div className="space-y-3 rounded-[1.5rem] border border-border bg-muted/40 p-4 sm:col-span-2">
         <div className="space-y-1">
           <p className="text-sm font-semibold">Как задать нормы питания</p>
           <p className="text-sm text-muted-foreground">Можно пересчитать их автоматически по профилю или ввести свои значения вручную.</p>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 xl:grid-cols-2">
           <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-border bg-background px-4 py-3 text-sm">
             <input type="radio" name="normMode" value="AUTO" checked={normMode === "AUTO"} onChange={() => setNormMode("AUTO")} className="mt-1" />
             <span className="space-y-1">
@@ -184,18 +184,18 @@ export function ProfileForm({ profile }: ProfileFormProps) {
         </>
       ) : null}
 
-      <div className="space-y-2 md:col-span-2">
+      <div className="space-y-2 sm:col-span-2">
         <label className="text-sm font-semibold" htmlFor="notes">
           Комментарий
         </label>
         <textarea id="notes" name="notes" defaultValue={profile.notes} rows={4} className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm" />
       </div>
 
-      {state?.error ? <p className="text-sm text-danger md:col-span-2">{state.error}</p> : null}
-      {state?.success ? <p className="text-sm text-success md:col-span-2">{state.success}</p> : null}
+      {state?.error ? <p className="text-sm text-danger sm:col-span-2">{state.error}</p> : null}
+      {state?.success ? <p className="text-sm text-success sm:col-span-2">{state.success}</p> : null}
 
-      <div className="md:col-span-2">
-        <Button type="submit" disabled={pending}>
+      <div className="sm:col-span-2">
+        <Button className="w-full sm:w-auto" type="submit" disabled={pending}>
           {pending ? "Сохраняем..." : normMode === "MANUAL" ? "Сохранить профиль и ручные нормы" : "Сохранить профиль и пересчитать нормы"}
         </Button>
       </div>

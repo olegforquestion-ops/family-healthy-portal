@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { previewMealDraftAction, saveMealDraftAction, type MealDraftActionState } from "@/modules/nutrition/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { previewMealDraftAction, saveMealDraftAction, type MealDraftActionState } from "@/modules/nutrition/actions";
 
 type MealDraftFormProps = {
   foodOptions: Array<{
@@ -40,7 +40,7 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
     : 0;
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
+    <div className="grid gap-5 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.04fr)] 2xl:gap-6">
       <Card>
         <CardHeader>
           <CardTitle>Параметры черновика</CardTitle>
@@ -66,7 +66,7 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
               </select>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-semibold" htmlFor="mealType">
                   Тип приема пищи
@@ -127,7 +127,7 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
             {state.error ? <p className="text-sm text-danger">{state.error}</p> : null}
             {state.success ? <p className="text-sm text-success">{state.success}</p> : null}
 
-            <Button type="submit" disabled={previewPending}>
+            <Button className="w-full sm:w-auto" type="submit" disabled={previewPending}>
               {previewPending ? "Считаем..." : "Предпросмотр пересчета"}
             </Button>
           </form>
@@ -141,17 +141,17 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
         <CardContent className="space-y-5">
           {state.preview ? (
             <>
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div className="rounded-[1.25rem] border border-border bg-background/70 p-4">
                   <p className="text-sm font-semibold text-muted-foreground">Сейчас за день</p>
-                  <p className="mt-3 font-display text-3xl">{state.preview.current.calories} ккал</p>
+                  <p className="mt-3 font-display text-3xl sm:text-4xl">{state.preview.current.calories} ккал</p>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Б {state.preview.current.proteinG} / Ж {state.preview.current.fatG} / У {state.preview.current.carbsG}
                   </p>
                 </div>
                 <div className="rounded-[1.25rem] border border-primary/30 bg-primary/5 p-4">
                   <p className="text-sm font-semibold text-primary">После сохранения</p>
-                  <p className="mt-3 font-display text-3xl">{state.preview.projected.calories} ккал</p>
+                  <p className="mt-3 font-display text-3xl sm:text-4xl">{state.preview.projected.calories} ккал</p>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Б {state.preview.projected.proteinG} / Ж {state.preview.projected.fatG} / У {state.preview.projected.carbsG}
                   </p>
@@ -170,7 +170,7 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
 
               {state.preview.targets ? (
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                  <div className="flex justify-between gap-4 text-sm">
                     <span>Выполнение дневной нормы по калориям</span>
                     <span>{projectedPercent}%</span>
                   </div>
@@ -178,7 +178,7 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
                 </div>
               ) : (
                 <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
-                  У пользователя пока нет current nutrition snapshot. Черновик все равно показывает прогноз фактических значений за день.
+                  У пользователя пока нет дневной нормы питания. Черновик все равно показывает прогноз фактических значений за день.
                 </div>
               )}
 
@@ -188,7 +188,7 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
                 <input type="hidden" name="quantityGrams" value={state.form?.quantityGrams || ""} />
                 <input type="hidden" name="consumedAt" value={state.form?.consumedAt || ""} />
                 <input type="hidden" name="note" value={state.form?.note || ""} />
-                <Button type="submit" disabled={savePending}>
+                <Button className="w-full sm:w-auto" type="submit" disabled={savePending}>
                   {savePending ? "Сохраняем..." : "Сохранить прием пищи"}
                 </Button>
               </form>

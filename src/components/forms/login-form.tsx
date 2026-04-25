@@ -2,8 +2,8 @@
 
 import { useActionState } from "react";
 
-import { loginAction, type FormState } from "@/modules/auth/actions";
 import { Button } from "@/components/ui/button";
+import { loginAction, type FormState } from "@/modules/auth/actions";
 
 const initialState: FormState = {};
 
@@ -11,7 +11,7 @@ export function LoginForm() {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form action={formAction} className="space-y-4 sm:space-y-5">
       <div className="space-y-2">
         <label className="text-sm font-semibold" htmlFor="login">
           Логин

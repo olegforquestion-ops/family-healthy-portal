@@ -2,8 +2,8 @@
 
 import { useActionState } from "react";
 
-import { createUserAction, type UserActionState } from "@/modules/users/actions";
 import { Button } from "@/components/ui/button";
+import { createUserAction, type UserActionState } from "@/modules/users/actions";
 
 const initialState: UserActionState = {};
 
@@ -11,8 +11,8 @@ export function CreateUserForm() {
   const [state, formAction, pending] = useActionState(createUserAction, initialState);
 
   return (
-    <form action={formAction} className="grid gap-4 md:grid-cols-2">
-      <div className="space-y-2 md:col-span-2">
+    <form action={formAction} className="grid gap-4 sm:grid-cols-2">
+      <div className="space-y-2 sm:col-span-2">
         <label className="text-sm font-semibold" htmlFor="displayName">
           Отображаемое имя
         </label>
@@ -53,10 +53,10 @@ export function CreateUserForm() {
         </select>
       </div>
 
-      {state?.error ? <p className="text-sm text-danger md:col-span-2">{state.error}</p> : null}
+      {state?.error ? <p className="text-sm text-danger sm:col-span-2">{state.error}</p> : null}
 
-      <div className="md:col-span-2">
-        <Button type="submit" disabled={pending}>
+      <div className="sm:col-span-2">
+        <Button className="w-full sm:w-auto" type="submit" disabled={pending}>
           {pending ? "Создаем..." : "Создать пользователя"}
         </Button>
       </div>

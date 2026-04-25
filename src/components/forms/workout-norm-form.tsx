@@ -11,15 +11,15 @@ export function WorkoutNormForm() {
   const [state, formAction, pending] = useActionState(createWorkoutNormAction, initialState);
 
   return (
-    <form action={formAction} className="grid gap-4 md:grid-cols-2">
-      <div className="space-y-2 md:col-span-2">
+    <form action={formAction} className="grid gap-4 sm:grid-cols-2">
+      <div className="space-y-2 sm:col-span-2">
         <label className="text-sm font-semibold" htmlFor="workout-norm-name">
           Название
         </label>
         <input
           id="workout-norm-name"
           name="name"
-          placeholder="Например, Эллипс"
+          placeholder="Например, эллипс"
           className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm"
         />
       </div>
@@ -50,7 +50,7 @@ export function WorkoutNormForm() {
         />
       </div>
 
-      <div className="space-y-2 md:col-span-2">
+      <div className="space-y-2 sm:col-span-2">
         <label className="text-sm font-semibold" htmlFor="workout-norm-default-quantity">
           Количество по умолчанию
         </label>
@@ -65,11 +65,11 @@ export function WorkoutNormForm() {
         />
       </div>
 
-      {state?.error ? <p className="text-sm text-danger md:col-span-2">{state.error}</p> : null}
-      {state?.success ? <p className="text-sm text-success md:col-span-2">{state.success}</p> : null}
+      {state?.error ? <p className="text-sm text-danger sm:col-span-2">{state.error}</p> : null}
+      {state?.success ? <p className="text-sm text-success sm:col-span-2">{state.success}</p> : null}
 
-      <div className="md:col-span-2">
-        <Button type="submit" disabled={pending}>
+      <div className="sm:col-span-2">
+        <Button className="w-full sm:w-auto" type="submit" disabled={pending}>
           {pending ? "Сохраняем..." : "Добавить норматив"}
         </Button>
       </div>

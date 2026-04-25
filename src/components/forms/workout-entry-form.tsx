@@ -32,10 +32,7 @@ export function WorkoutEntryForm({ norms }: WorkoutEntryFormProps) {
   const [selectedNormId, setSelectedNormId] = useState(norms[0]?.id ?? "");
   const [quantity, setQuantity] = useState(norms[0]?.defaultQuantity ?? "1");
 
-  const selectedNorm = useMemo(
-    () => norms.find((norm) => norm.id === selectedNormId) ?? null,
-    [norms, selectedNormId],
-  );
+  const selectedNorm = useMemo(() => norms.find((norm) => norm.id === selectedNormId) ?? null, [norms, selectedNormId]);
 
   useEffect(() => {
     setQuantity(selectedNorm?.defaultQuantity ?? "1");
@@ -120,7 +117,7 @@ export function WorkoutEntryForm({ norms }: WorkoutEntryFormProps) {
             />
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <label className="text-sm font-semibold" htmlFor="workout-duration">
                 Длительность, мин
@@ -180,7 +177,7 @@ export function WorkoutEntryForm({ norms }: WorkoutEntryFormProps) {
       {state?.error ? <p className="text-sm text-danger">{state.error}</p> : null}
       {state?.success ? <p className="text-sm text-success">{state.success}</p> : null}
 
-      <Button type="submit" disabled={pending}>
+      <Button className="w-full sm:w-auto" type="submit" disabled={pending}>
         {pending ? "Сохраняем..." : "Добавить тренировку"}
       </Button>
     </form>
