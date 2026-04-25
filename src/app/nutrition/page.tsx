@@ -91,7 +91,7 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                         {mealTypeLabels[meal.mealType]} • {new Date(meal.consumedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>
-                    <Badge variant="secondary">{meal.totalCalories} ккал</Badge>
+                    <Badge variant="secondary">{meal.totalCalories.toString()} ккал</Badge>
                   </div>
                   <p className="mt-3 text-sm text-muted-foreground">
                     Б {meal.totalProteinG.toString()} / Ж {meal.totalFatG.toString()} / У {meal.totalCarbsG.toString()}
