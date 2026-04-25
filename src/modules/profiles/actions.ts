@@ -134,7 +134,7 @@ export async function saveProfileAction(_prevState: ProfileActionState, formData
     const calculation = calculateNutritionNorm({
       activityLevel: profile.activityLevel,
       dateOfBirth: profile.dateOfBirth,
-      heightCm: Number(profile.heightCm),
+      heightCm: profile.heightCm,
       profileGoalTypeCode: profile.profileGoalTypeCode,
       sex: profile.sex,
       waterTargetMl: profile.waterTargetMl,
