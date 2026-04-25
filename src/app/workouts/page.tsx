@@ -27,7 +27,7 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
       <div className="space-y-2">
         <Badge>Тренировки</Badge>
         <h1 className="font-display text-3xl font-semibold">Тренировки</h1>
-        <p className="max-w-4xl text-muted-foreground">На телефоне здесь важнее всего быстро зафиксировать активность, а не прокручивать длинную аналитику.</p>
+        <p className="hidden max-w-4xl text-muted-foreground sm:block">На телефоне здесь важнее всего быстро зафиксировать активность, а не прокручивать длинную аналитику.</p>
         <p className="text-sm text-muted-foreground">Дата просмотра: {data.date.toLocaleDateString("ru-RU")}</p>
       </div>
 

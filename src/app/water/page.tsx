@@ -23,7 +23,7 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
       <div className="space-y-2">
         <Badge>Вода</Badge>
         <h1 className="font-display text-3xl font-semibold">Вода</h1>
-        <p className="max-w-3xl text-muted-foreground">На мобильном это быстрый экран: отметить объем, увидеть прогресс и не утонуть в лишних деталях.</p>
+        <p className="hidden max-w-3xl text-muted-foreground sm:block">На мобильном это быстрый экран: отметить объем, увидеть прогресс и не утонуть в лишних деталях.</p>
         <p className="text-sm text-muted-foreground">Дата просмотра: {data.date.toLocaleDateString("ru-RU")}</p>
       </div>
 

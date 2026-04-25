@@ -46,7 +46,7 @@ export default async function DashboardPage() {
           {session.user.role === "ADMIN" ? "Роль: администратор" : "Роль: пользователь"}
         </Badge>
         <h1 className="font-display text-3xl font-semibold">Сегодня</h1>
-        <p className="max-w-3xl text-muted-foreground">Главный экран для телефона: быстро занести еду, воду и тренировку, а затем сразу увидеть картину дня.</p>
+        <p className="hidden max-w-3xl text-muted-foreground sm:block">Главный экран для телефона: быстро занести еду, воду и тренировку, а затем сразу увидеть картину дня.</p>
       </div>
 
       <div className="grid gap-4 lg:hidden">

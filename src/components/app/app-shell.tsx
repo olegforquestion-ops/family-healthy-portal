@@ -114,59 +114,55 @@ export function AppShell({ children, session }: AppShellProps) {
           </nav>
         </aside>
 
-        <main className="min-w-0 flex-1 pb-24 xl:pb-0">
-          <header className="mb-4 rounded-[1.5rem] border border-white/70 bg-card/80 p-3 shadow-soft backdrop-blur sm:mb-5 sm:p-4 lg:p-5">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <main className="min-w-0 flex-1 pb-36 xl:pb-0">
+          <header className="mb-3 rounded-[1.25rem] border border-white/70 bg-card/80 p-3 shadow-soft backdrop-blur sm:mb-5 sm:rounded-[1.5rem] sm:p-4 lg:p-5">
+            <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Текущий раздел</p>
-                <p className="font-display text-lg font-semibold leading-tight sm:text-xl lg:text-[1.7rem]">{sectionLabel}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:text-xs sm:tracking-[0.2em]">Текущий раздел</p>
+                <p className="font-display text-base font-semibold leading-tight sm:text-xl lg:text-[1.7rem]">{sectionLabel}</p>
                 <p className="mt-1 hidden text-sm text-muted-foreground sm:block">На телефоне упор на быстрые действия дня, на десктопе доступен полный рабочий режим.</p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                <Badge variant={role === "ADMIN" ? "success" : "secondary"}>
+              <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                <Badge className="hidden sm:inline-flex" variant={role === "ADMIN" ? "success" : "secondary"}>
                   {role === "ADMIN" ? "Администратор" : "Пользователь"}
                 </Badge>
-                <div className="max-w-[160px] truncate rounded-full bg-muted px-3 py-2 text-sm text-muted-foreground sm:max-w-[220px] sm:px-4">
-                  {session?.user.name || session?.user.login}
-                </div>
                 <form action={logoutAction}>
                   <Button variant="outline" size="sm" type="submit">
                     <LogOut className="h-4 w-4" />
-                    Выйти
+                    <span className="hidden sm:inline">Выйти</span>
                   </Button>
                 </form>
               </div>
             </div>
-
-            {mobileSecondaryNav.length ? (
-              <div className="mt-4 xl:hidden">
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Еще</p>
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  {mobileSecondaryNav.map((item) => {
-                    const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={cn(
-                          "inline-flex shrink-0 rounded-full border px-3 py-2 text-sm transition-colors",
-                          active ? "border-primary bg-primary/10 text-primary" : "border-border bg-background text-muted-foreground hover:bg-muted",
-                        )}
-                      >
-                        {item.label}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : null}
           </header>
 
           <div className="space-y-5 lg:space-y-6">{children}</div>
         </main>
       </div>
+
+      {mobileSecondaryNav.length ? (
+        <div className="fixed inset-x-0 bottom-[4.65rem] z-20 border-t border-white/70 bg-background/92 px-2 py-2 shadow-soft backdrop-blur xl:hidden">
+          <div className="mx-auto flex max-w-[760px] gap-2 overflow-x-auto pb-1">
+            {mobileSecondaryNav.map((item) => {
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "inline-flex shrink-0 rounded-full border px-3 py-2 text-sm transition-colors",
+                    active ? "border-primary bg-primary/10 text-primary" : "border-border bg-background text-muted-foreground hover:bg-muted",
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
 
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-white/70 bg-background/95 px-2 py-2 shadow-soft backdrop-blur xl:hidden">
         <div className="mx-auto flex max-w-[760px] items-center justify-between gap-1">

@@ -34,7 +34,7 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
         <div className="space-y-2">
           <Badge>Питание</Badge>
           <h1 className="font-display text-3xl font-semibold">Питание</h1>
-          <p className="max-w-3xl text-muted-foreground">На телефоне здесь главное быстро занести прием пищи и сразу увидеть, как он повлиял на дневной баланс.</p>
+          <p className="hidden max-w-3xl text-muted-foreground sm:block">На телефоне здесь главное быстро занести прием пищи и сразу увидеть, как он повлиял на дневной баланс.</p>
           <p className="text-sm text-muted-foreground">Дата просмотра: {data.date.toLocaleDateString("ru-RU")}</p>
         </div>
         <Link href="/nutrition/draft">
