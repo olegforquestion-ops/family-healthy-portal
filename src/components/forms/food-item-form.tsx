@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { createFoodAction } from "@/modules/foods/actions";
+import { createFoodAction, type FoodActionState } from "@/modules/foods/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: FoodActionState = {};
 
 export function FoodItemForm() {
   const [state, formAction, pending] = useActionState(createFoodAction, initialState);
