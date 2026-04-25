@@ -13,13 +13,13 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6">
       <Card className="overflow-hidden border-none bg-[linear-gradient(160deg,rgba(252,236,197,0.96),rgba(255,255,255,0.9))]">
-        <CardContent className="flex min-h-[540px] flex-col justify-between p-8 md:p-10">
+        <CardContent className="flex min-h-[420px] flex-col justify-between p-5 sm:p-6 md:min-h-[540px] md:p-10">
           <div className="space-y-6">
             <Badge variant="secondary">Core MVP</Badge>
             <div className="space-y-3">
-              <h1 className="font-display text-4xl font-semibold text-balance md:text-5xl">
+              <h1 className="font-display text-3xl font-semibold text-balance sm:text-4xl md:text-5xl">
                 Один вход для всей семейной системы учета.
               </h1>
               <p className="max-w-xl text-base leading-7 text-muted-foreground">
@@ -29,7 +29,7 @@ export default async function LoginPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-[1.25rem] border border-white/70 bg-white/70 p-4">
               <p className="font-semibold">Без саморегистрации</p>
               <p className="mt-2 text-sm text-muted-foreground">Новые учетные записи создает только администратор.</p>
