@@ -7,6 +7,12 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 FROM deps AS builder
+ARG DATABASE_URL=postgresql://postgres:postgres@db:5432/family_portal?schema=public
+ARG AUTH_SECRET=build-only-secret
+ARG APP_URL=http://localhost:3000
+ENV DATABASE_URL=$DATABASE_URL
+ENV AUTH_SECRET=$AUTH_SECRET
+ENV APP_URL=$APP_URL
 COPY prisma ./prisma
 COPY next.config.ts tsconfig.json postcss.config.js tailwind.config.ts next-env.d.ts ./
 COPY src ./src
