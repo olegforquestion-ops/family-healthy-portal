@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { createUserAction } from "@/modules/users/actions";
+import { createUserAction, type UserActionState } from "@/modules/users/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: UserActionState = {};
 
 export function CreateUserForm() {
   const [state, formAction, pending] = useActionState(createUserAction, initialState);
