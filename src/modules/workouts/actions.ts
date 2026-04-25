@@ -34,6 +34,10 @@ const createWorkoutNormSchema = z.object({
   defaultQuantity: optionalStringField(),
 });
 
+const deleteWorkoutNormSchema = z.object({
+  workoutNormId: z.string().min(1, "Не удалось определить норматив для удаления."),
+});
+
 const createWorkoutEntrySchema = z.object({
   method: z.enum(["MANUAL", "NORM"]),
   workoutNormId: optionalStringField(),
@@ -143,6 +147,28 @@ export async function createWorkoutNormAction(
   revalidatePath("/workouts");
 
   return { success: "Норматив тренировки добавлен." };
+}
+
+export async function deleteWorkoutNormAction(formData: FormData): Promise<void> {
+  const session = await requireSession();
+  assertAdmin(session.user.role);
+
+  const parsed = deleteWorkoutNormSchema.safeParse({
+    workoutNormId: formData.get("workoutNormId"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Не удалось удалить норматив.");
+  }
+
+  await prisma.workoutNorm.update({
+    where: { id: parsed.data.workoutNormId },
+    data: {
+      isActive: false,
+    },
+  });
+
+  revalidatePath("/workouts");
 }
 
 export async function createWorkoutEntryAction(

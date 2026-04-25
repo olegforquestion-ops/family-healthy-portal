@@ -60,6 +60,11 @@ enum GoalStatus {
   ARCHIVED
 }
 
+enum NutritionNormSource {
+  AUTO
+  MANUAL
+}
+
 model Family {
   id        String   @id @default(cuid())
   name      String
@@ -155,6 +160,7 @@ model NutritionNormSnapshot {
   userId         String
   calculatedAt   DateTime @default(now())
   sourceWeightKg Decimal? @db.Decimal(5, 2)
+  source         NutritionNormSource @default(AUTO)
   dailyCalories  Int
   proteinG       Decimal  @db.Decimal(6, 2)
   fatG           Decimal  @db.Decimal(6, 2)

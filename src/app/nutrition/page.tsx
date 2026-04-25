@@ -49,7 +49,6 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
         <Card className="overflow-hidden border-none bg-[linear-gradient(160deg,rgba(252,236,197,0.96),rgba(255,255,255,0.92))]">
           <CardHeader>
             <CardTitle>Сегодняшний баланс</CardTitle>
-            <CardDescription>Быстрый ориентир без перегруженной аналитики.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-2">
@@ -78,7 +77,6 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
         <Card>
           <CardHeader>
             <CardTitle>Приемы пищи за день</CardTitle>
-            <CardDescription>Сначала список, потом детали. Так мобильный экран не перегружается.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {data.meals.length ? (

@@ -39,9 +39,15 @@ export async function addWeightAction(_prevState: MeasurementActionState, formDa
     return { error: parsed.error.issues[0]?.message || "Проверьте форму веса." };
   }
 
-  const profile = await prisma.profile.findUnique({
-    where: { userId: session.user.id },
-  });
+  const [profile, currentNorm] = await Promise.all([
+    prisma.profile.findUnique({
+      where: { userId: session.user.id },
+    }),
+    prisma.nutritionNormSnapshot.findFirst({
+      where: { userId: session.user.id, isCurrent: true },
+      orderBy: { calculatedAt: "desc" },
+    }),
+  ]);
 
   await prisma.weightEntry.create({
     data: {
@@ -52,7 +58,7 @@ export async function addWeightAction(_prevState: MeasurementActionState, formDa
     },
   });
 
-  if (profile?.heightCm) {
+  if (profile?.heightCm && currentNorm?.source !== "MANUAL") {
     const calculation = calculateNutritionNorm({
       activityLevel: profile.activityLevel,
       dateOfBirth: profile.dateOfBirth,
@@ -72,6 +78,7 @@ export async function addWeightAction(_prevState: MeasurementActionState, formDa
         data: {
           userId: session.user.id,
           sourceWeightKg: new Prisma.Decimal(parsed.data.weightKg),
+          source: "AUTO",
           dailyCalories: calculation.dailyCalories,
           proteinG: new Prisma.Decimal(calculation.proteinG),
           fatG: new Prisma.Decimal(calculation.fatG),
@@ -86,7 +93,7 @@ export async function addWeightAction(_prevState: MeasurementActionState, formDa
   revalidatePath("/measurements");
   revalidatePath("/profile");
 
-  return { success: "Вес добавлен." };
+  return { success: currentNorm?.source === "MANUAL" ? "Вес добавлен. Ручная норма сохранена без пересчета." : "Вес добавлен." };
 }
 
 export async function addMeasurementAction(

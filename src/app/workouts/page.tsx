@@ -1,8 +1,10 @@
+import { DeleteWorkoutNormButton } from "@/components/workouts/delete-workout-norm-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkoutEntryForm } from "@/components/forms/workout-entry-form";
 import { WorkoutNormForm } from "@/components/forms/workout-norm-form";
 import { requireSession } from "@/lib/session";
+import { deleteWorkoutNormAction } from "@/modules/workouts/actions";
 import { getWorkoutDayData } from "@/modules/workouts/queries";
 
 const methodLabels: Record<string, string> = {
@@ -35,7 +37,6 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
         <Card className="overflow-hidden border-none bg-[linear-gradient(160deg,rgba(230,239,226,0.96),rgba(255,255,255,0.92))]">
           <CardHeader>
             <CardTitle>Итог за день</CardTitle>
-            <CardDescription>Сначала ввод и краткий итог, история ниже.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="grid gap-3 sm:grid-cols-2">
@@ -66,7 +67,6 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
         <Card>
           <CardHeader>
             <CardTitle>История тренировок</CardTitle>
-            <CardDescription>Короткий список без лишнего шума.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {data.entries.length ? (
@@ -181,15 +181,23 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
             </CardHeader>
             <CardContent className="space-y-3">
               {data.norms.map((norm) => (
-                <div key={norm.id} className="flex flex-col gap-2 rounded-[1.25rem] bg-muted/60 p-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="font-semibold">{norm.name}</p>
-                    <p className="text-sm text-muted-foreground">За {norm.unitLabel}</p>
+                <div key={norm.id} className="rounded-[1.25rem] bg-muted/60 p-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="font-semibold">{norm.name}</p>
+                      <p className="text-sm text-muted-foreground">За {norm.unitLabel}</p>
+                    </div>
+                    <div className="text-left sm:text-right">
+                      <p className="font-semibold">{norm.caloriesPerUnit.toString()} ккал</p>
+                      {norm.defaultQuantity ? <p className="text-sm text-muted-foreground">По умолчанию: {norm.defaultQuantity.toString()}</p> : null}
+                    </div>
                   </div>
-                  <div className="text-left sm:text-right">
-                    <p className="font-semibold">{norm.caloriesPerUnit.toString()} ккал</p>
-                    {norm.defaultQuantity ? <p className="text-sm text-muted-foreground">По умолчанию: {norm.defaultQuantity.toString()}</p> : null}
-                  </div>
+                  {session.user.role === "ADMIN" ? (
+                    <form action={deleteWorkoutNormAction} className="mt-3">
+                      <input type="hidden" name="workoutNormId" value={norm.id} />
+                      <DeleteWorkoutNormButton normName={norm.name} />
+                    </form>
+                  ) : null}
                 </div>
               ))}
             </CardContent>

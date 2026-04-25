@@ -53,7 +53,6 @@ export default async function DashboardPage() {
         <Card className="overflow-hidden border-none bg-[linear-gradient(160deg,rgba(252,236,197,0.96),rgba(255,255,255,0.92))]">
           <CardHeader>
             <CardTitle>Быстрые действия дня</CardTitle>
-            <CardDescription>Три главных сценария мобильного режима и быстрый доступ к весу и замерам.</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
             <Link href="/nutrition/draft" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
@@ -122,7 +121,6 @@ export default async function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Прогресс за день</CardTitle>
-            <CardDescription>Ключевые показатели, которые должны быть видны сразу без переходов по страницам.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {[
@@ -145,7 +143,6 @@ export default async function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Последние действия</CardTitle>
-            <CardDescription>Небольшая лента помогает убедиться, что записи действительно попали в систему.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {recentActivity.length ? (
@@ -161,9 +158,7 @@ export default async function DashboardPage() {
                 </div>
               ))
             ) : (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
-                За сегодня пока нет записей. Начните с еды, воды или тренировки.
-              </div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">За сегодня пока нет записей. Начните с еды, воды или тренировки.</div>
             )}
           </CardContent>
         </Card>

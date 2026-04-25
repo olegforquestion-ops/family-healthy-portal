@@ -148,6 +148,7 @@ export async function saveProfileAction(_prevState: ProfileActionState, formData
 
     const snapshotData = isManualNorm
       ? {
+          source: "MANUAL" as const,
           dailyCalories: data.manualDailyCalories!,
           proteinG: new Prisma.Decimal(data.manualProteinG!),
           fatG: new Prisma.Decimal(data.manualFatG!),
@@ -155,6 +156,7 @@ export async function saveProfileAction(_prevState: ProfileActionState, formData
           waterTargetMl: Number(data.waterTargetMl ?? calculation.waterTargetMl),
         }
       : {
+          source: "AUTO" as const,
           dailyCalories: calculation.dailyCalories,
           proteinG: new Prisma.Decimal(calculation.proteinG),
           fatG: new Prisma.Decimal(calculation.fatG),
@@ -166,6 +168,7 @@ export async function saveProfileAction(_prevState: ProfileActionState, formData
       data: {
         userId: session.user.id,
         sourceWeightKg: new Prisma.Decimal(data.currentWeightKg),
+        source: snapshotData.source,
         dailyCalories: snapshotData.dailyCalories,
         proteinG: snapshotData.proteinG,
         fatG: snapshotData.fatG,

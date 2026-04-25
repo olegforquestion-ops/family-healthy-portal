@@ -31,7 +31,6 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
         <Card className="overflow-hidden border-none bg-[linear-gradient(160deg,rgba(227,245,245,0.96),rgba(255,255,255,0.92))]">
           <CardHeader>
             <CardTitle>Прогресс по воде</CardTitle>
-            <CardDescription>Главный мобильный сценарий: нажать, сохранить и сразу увидеть результат.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="rounded-[1.5rem] bg-white/85 p-5">
@@ -54,7 +53,6 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
         <Card>
           <CardHeader>
             <CardTitle>Последние записи</CardTitle>
-            <CardDescription>Небольшая лента вместо громоздкой таблицы.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {data.entries.length ? (

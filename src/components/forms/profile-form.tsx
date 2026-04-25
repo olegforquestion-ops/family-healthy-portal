@@ -25,12 +25,13 @@ type ProfileFormProps = {
     proteinG: string;
     fatG: string;
     carbsG: string;
+    initialNormMode: "AUTO" | "MANUAL";
   };
 };
 
 export function ProfileForm({ profile }: ProfileFormProps) {
   const [state, formAction, pending] = useActionState(saveProfileAction, initialState);
-  const [normMode, setNormMode] = useState<"AUTO" | "MANUAL">("AUTO");
+  const [normMode, setNormMode] = useState<"AUTO" | "MANUAL">(profile.initialNormMode);
 
   return (
     <form action={formAction} className="grid gap-4 sm:grid-cols-2">
@@ -130,7 +131,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       <div className="space-y-3 rounded-[1.5rem] border border-border bg-muted/40 p-4 sm:col-span-2">
         <div className="space-y-1">
           <p className="text-sm font-semibold">Как задать нормы питания</p>
-          <p className="text-sm text-muted-foreground">Можно пересчитать их автоматически по профилю или ввести свои значения вручную.</p>
+          <p className="text-sm text-muted-foreground">Ручная норма теперь сохраняется как отдельный режим и не пересчитывается автоматически при изменении веса.</p>
         </div>
 
         <div className="grid gap-3 xl:grid-cols-2">

@@ -1,8 +1,8 @@
-import { requireSession } from "@/lib/session";
-import { getProfilePageData } from "@/modules/profiles/queries";
 import { ProfileForm } from "@/components/forms/profile-form";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireSession } from "@/lib/session";
+import { getProfilePageData } from "@/modules/profiles/queries";
 
 export default async function ProfilePage() {
   const session = await requireSession();
@@ -43,6 +43,7 @@ export default async function ProfilePage() {
                 proteinG: currentNorm?.proteinG?.toString() ?? "",
                 fatG: currentNorm?.fatG?.toString() ?? "",
                 carbsG: currentNorm?.carbsG?.toString() ?? "",
+                initialNormMode: currentNorm?.source === "MANUAL" ? "MANUAL" : "AUTO",
               }}
             />
           </CardContent>
@@ -60,6 +61,7 @@ export default async function ProfilePage() {
               ["Жиры", currentNorm ? `${currentNorm.fatG} г/день` : "Нет данных"],
               ["Углеводы", currentNorm ? `${currentNorm.carbsG} г/день` : "Нет данных"],
               ["Вода", currentNorm ? `${currentNorm.waterTargetMl} мл/день` : "Нет данных"],
+              ["Режим", currentNorm ? (currentNorm.source === "MANUAL" ? "Ручной" : "Автоматический") : "Нет данных"],
             ].map(([label, value]) => (
               <div key={label} className="flex items-center justify-between rounded-[1.25rem] bg-muted/60 p-4">
                 <span className="font-semibold">{label}</span>
