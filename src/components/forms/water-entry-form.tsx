@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { createWaterEntryAction } from "@/modules/water/actions";
+import { createWaterEntryAction, type WaterEntryActionState } from "@/modules/water/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: WaterEntryActionState = {};
 
 function getLocalDateTimeInputValue() {
   const now = new Date();

@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { createWorkoutNormAction } from "@/modules/workouts/actions";
+import { createWorkoutNormAction, type WorkoutActionState } from "@/modules/workouts/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: WorkoutActionState = {};
 
 export function WorkoutNormForm() {
   const [state, formAction, pending] = useActionState(createWorkoutNormAction, initialState);

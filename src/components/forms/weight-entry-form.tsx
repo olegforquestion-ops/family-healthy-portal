@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { addWeightAction } from "@/modules/measurements/actions";
+import { addWeightAction, type MeasurementActionState } from "@/modules/measurements/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: MeasurementActionState = {};
 
 export function WeightEntryForm() {
   const [state, formAction, pending] = useActionState(addWeightAction, initialState);

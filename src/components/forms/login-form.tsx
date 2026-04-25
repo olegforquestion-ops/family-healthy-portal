@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { loginAction } from "@/modules/auth/actions";
+import { loginAction, type FormState } from "@/modules/auth/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: FormState = {};
 
 export function LoginForm() {
   const [state, formAction, pending] = useActionState(loginAction, initialState);

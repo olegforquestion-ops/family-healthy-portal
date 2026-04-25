@@ -2,10 +2,10 @@
 
 import { useActionState, useEffect, useMemo, useState } from "react";
 
-import { createWorkoutEntryAction } from "@/modules/workouts/actions";
+import { createWorkoutEntryAction, type WorkoutActionState } from "@/modules/workouts/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: WorkoutActionState = {};
 
 type WorkoutNormOption = {
   id: string;

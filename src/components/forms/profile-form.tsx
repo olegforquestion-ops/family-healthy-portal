@@ -2,10 +2,10 @@
 
 import { useActionState, useState } from "react";
 
-import { saveProfileAction } from "@/modules/profiles/actions";
+import { saveProfileAction, type ProfileActionState } from "@/modules/profiles/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: ProfileActionState = {};
 
 type ProfileFormProps = {
   profile: {

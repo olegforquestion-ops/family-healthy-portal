@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 
-import { addMeasurementAction } from "@/modules/measurements/actions";
+import { addMeasurementAction, type MeasurementActionState } from "@/modules/measurements/actions";
 import { Button } from "@/components/ui/button";
 
-const initialState = {};
+const initialState: MeasurementActionState = {};
 
 export function MeasurementEntryForm() {
   const [state, formAction, pending] = useActionState(addMeasurementAction, initialState);
