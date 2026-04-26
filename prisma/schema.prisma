@@ -247,8 +247,10 @@ model MealEntry {
 model MealItem {
   id            String   @id @default(cuid())
   mealEntryId   String
-  foodItemId    String
-  quantityGrams Decimal  @db.Decimal(8, 2)
+  foodItemId    String?
+  customName    String?
+  quantityGrams Decimal? @db.Decimal(8, 2)
+  portionCount  Decimal? @db.Decimal(8, 2)
   calories      Decimal  @db.Decimal(8, 2)
   proteinG      Decimal  @db.Decimal(8, 2)
   fatG          Decimal  @db.Decimal(8, 2)
@@ -256,7 +258,7 @@ model MealItem {
   createdAt     DateTime @default(now())
 
   mealEntry MealEntry @relation(fields: [mealEntryId], references: [id], onDelete: Cascade)
-  foodItem  FoodItem  @relation(fields: [foodItemId], references: [id], onDelete: Restrict)
+  foodItem  FoodItem? @relation(fields: [foodItemId], references: [id], onDelete: Restrict)
 
   @@index([mealEntryId])
   @@index([foodItemId])

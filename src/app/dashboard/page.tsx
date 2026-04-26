@@ -16,8 +16,11 @@ export default async function DashboardPage() {
   const recentActivity = [
     ...data.nutrition.meals.map((meal) => ({
       id: `meal-${meal.id}`,
-      label: meal.items[0]?.foodItem.name ?? "Прием пищи",
-      meta: `${new Date(meal.consumedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })} • ${meal.totalCalories} ккал`,
+      label: meal.items[0]?.foodItem?.name ?? meal.items[0]?.customName ?? "Прием пищи",
+      meta: `${new Date(meal.consumedAt).toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })} • ${meal.totalCalories} ккал`,
       recordedAt: new Date(meal.consumedAt).getTime(),
       type: "Питание",
     })),
@@ -31,7 +34,10 @@ export default async function DashboardPage() {
     ...data.workouts.entries.map((entry) => ({
       id: `workout-${entry.id}`,
       label: entry.activityName,
-      meta: `${new Date(entry.performedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })} • ${entry.caloriesBurned} ккал`,
+      meta: `${new Date(entry.performedAt).toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })} • ${entry.caloriesBurned} ккал`,
       recordedAt: new Date(entry.performedAt).getTime(),
       type: "Тренировка",
     })),
@@ -53,7 +59,10 @@ export default async function DashboardPage() {
             <CardTitle>Быстрые действия дня</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
-            <Link href="/nutrition/draft" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
+            <Link
+              href="/nutrition/draft"
+              className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5"
+            >
               <div className="flex items-center gap-3">
                 <Apple className="h-5 w-5 text-primary" />
                 <div>
@@ -62,7 +71,10 @@ export default async function DashboardPage() {
                 </div>
               </div>
             </Link>
-            <Link href="/water" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
+            <Link
+              href="/water"
+              className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5"
+            >
               <div className="flex items-center gap-3">
                 <Droplets className="h-5 w-5 text-primary" />
                 <div>
@@ -71,7 +83,10 @@ export default async function DashboardPage() {
                 </div>
               </div>
             </Link>
-            <Link href="/workouts" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
+            <Link
+              href="/workouts"
+              className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5"
+            >
               <div className="flex items-center gap-3">
                 <Dumbbell className="h-5 w-5 text-primary" />
                 <div>
@@ -80,7 +95,10 @@ export default async function DashboardPage() {
                 </div>
               </div>
             </Link>
-            <Link href="/measurements" className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5">
+            <Link
+              href="/measurements"
+              className="rounded-[1.25rem] border border-white/80 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5"
+            >
               <div className="flex items-center gap-3">
                 <Ruler className="h-5 w-5 text-primary" />
                 <div>
@@ -156,7 +174,9 @@ export default async function DashboardPage() {
                 </div>
               ))
             ) : (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">За сегодня пока нет записей. Начните с еды, воды или тренировки.</div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
+                За сегодня пока нет записей. Начните с еды, воды или тренировки.
+              </div>
             )}
           </CardContent>
         </Card>
@@ -176,7 +196,9 @@ export default async function DashboardPage() {
             <CardTitle>Норма калорий</CardTitle>
             <CardDescription>Рекомендуемый ориентир на день.</CardDescription>
           </CardHeader>
-          <CardContent className="text-3xl font-semibold">{currentNorm ? `${currentNorm.dailyCalories} ккал` : "Заполните профиль"}</CardContent>
+          <CardContent className="text-3xl font-semibold">
+            {currentNorm ? `${currentNorm.dailyCalories} ккал` : "Заполните профиль"}
+          </CardContent>
         </Card>
 
         <Card>
@@ -218,7 +240,9 @@ export default async function DashboardPage() {
               </div>
             ))}
 
-            <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">Сожжено на тренировках сегодня: {data.workouts.totalCalories.toFixed(0)} ккал</div>
+            <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
+              Сожжено на тренировках сегодня: {data.workouts.totalCalories.toFixed(0)} ккал
+            </div>
           </CardContent>
         </Card>
 
@@ -248,7 +272,15 @@ export default async function DashboardPage() {
                       <p className="font-semibold">{goal.title}</p>
                       <p className="text-sm text-muted-foreground">{goal.goalTemplate.label}</p>
                     </div>
-                    <Badge variant={goal.derivedStatus === "COMPLETED" ? "success" : goal.derivedStatus === "EXPIRED" ? "warning" : "secondary"}>
+                    <Badge
+                      variant={
+                        goal.derivedStatus === "COMPLETED"
+                          ? "success"
+                          : goal.derivedStatus === "EXPIRED"
+                            ? "warning"
+                            : "secondary"
+                      }
+                    >
                       {goal.progressPercent.toFixed(0)}%
                     </Badge>
                   </div>
@@ -258,7 +290,9 @@ export default async function DashboardPage() {
                 </div>
               ))
             ) : (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">Целей пока нет. Добавьте первую цель, чтобы видеть прогресс на главной.</div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
+                Целей пока нет. Добавьте первую цель, чтобы видеть прогресс на главной.
+              </div>
             )}
           </CardContent>
         </Card>

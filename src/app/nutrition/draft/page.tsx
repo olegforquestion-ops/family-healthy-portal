@@ -1,7 +1,7 @@
+import { Badge } from "@/components/ui/badge";
+import { MealDraftForm } from "@/components/forms/meal-draft-form";
 import { requireSession } from "@/lib/session";
 import { listFoodOptions } from "@/modules/foods/queries";
-import { MealDraftForm } from "@/components/forms/meal-draft-form";
-import { Badge } from "@/components/ui/badge";
 
 export default async function MealDraftPage() {
   await requireSession();
@@ -13,7 +13,8 @@ export default async function MealDraftPage() {
         <Badge>Черновик приема пищи</Badge>
         <h1 className="font-display text-3xl font-semibold">Черновик приема пищи</h1>
         <p className="max-w-3xl text-muted-foreground">
-          Выберите продукт или блюдо, укажите количество и сразу увидите, как это повлияет на дневной баланс до сохранения.
+          Можно выбрать запись из базы или ввести КБЖУ вручную, если это разовый прием пищи вне вашей постоянной базы
+          продуктов.
         </p>
       </div>
 

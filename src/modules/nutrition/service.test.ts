@@ -1,13 +1,19 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { Prisma } from "@prisma/client";
 
-import { calculateMealItemNutrition, calculateNutritionNorm, projectMealOntoDay } from "@/modules/nutrition/service";
+import {
+  calculateMealItemNutrition,
+  calculateMealPortionNutrition,
+  calculateNutritionNorm,
+  projectMealOntoDay,
+} from "@/modules/nutrition/service";
 
 test("calculateNutritionNorm returns stable calories and macros", () => {
   const result = calculateNutritionNorm({
     activityLevel: "MODERATE",
     dateOfBirth: new Date("1990-05-10"),
-    heightCm: 170,
+    heightCm: new Prisma.Decimal(170),
     profileGoalTypeCode: "MAINTAIN_WEIGHT",
     sex: "FEMALE",
     waterTargetMl: 2200,
@@ -35,6 +41,23 @@ test("calculateMealItemNutrition scales food values by quantity", () => {
     proteinG: 15,
     fatG: 12,
     carbsG: 30,
+  });
+});
+
+test("calculateMealPortionNutrition scales manual values by portions", () => {
+  const result = calculateMealPortionNutrition({
+    caloriesPerPortion: 420,
+    proteinPerPortion: 24,
+    fatPerPortion: 14,
+    carbsPerPortion: 38,
+    portionCount: 1.5,
+  });
+
+  assert.deepEqual(result, {
+    calories: 630,
+    proteinG: 36,
+    fatG: 21,
+    carbsG: 57,
   });
 });
 

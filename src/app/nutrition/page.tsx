@@ -23,6 +23,15 @@ type NutritionPageProps = {
   }>;
 };
 
+function getMealItemLabel(meal: {
+  items: Array<{
+    customName?: string | null;
+    foodItem?: { name: string } | null;
+  }>;
+}) {
+  return meal.items[0]?.foodItem?.name ?? meal.items[0]?.customName ?? "Прием пищи";
+}
+
 export default async function NutritionPage({ searchParams }: NutritionPageProps) {
   const session = await requireSession();
   const params = (await searchParams) ?? {};
@@ -83,9 +92,10 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                 <div key={meal.id} className="rounded-[1.25rem] border border-border bg-background/70 p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="font-semibold">{meal.items[0]?.foodItem.name ?? "Прием пищи"}</p>
+                      <p className="font-semibold">{getMealItemLabel(meal)}</p>
                       <p className="text-sm text-muted-foreground">
-                        {mealTypeLabels[meal.mealType]} • {new Date(meal.consumedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
+                        {mealTypeLabels[meal.mealType]} •{" "}
+                        {new Date(meal.consumedAt).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>
                     <Badge variant="secondary">{meal.totalCalories.toString()} ккал</Badge>
@@ -95,12 +105,14 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                   </p>
                   <form action={deleteMealEntryAction} className="mt-3">
                     <input type="hidden" name="mealEntryId" value={meal.id} />
-                    <DeleteEntryButton confirmText={`Удалить прием пищи "${meal.items[0]?.foodItem.name ?? "без названия"}"?`} />
+                    <DeleteEntryButton confirmText={`Удалить прием пищи "${getMealItemLabel(meal)}"?`} />
                   </form>
                 </div>
               ))
             ) : (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">За выбранный день записей пока нет. Начните с черновика приема пищи.</div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
+                За выбранный день записей пока нет. Начните с черновика приема пищи.
+              </div>
             )}
           </CardContent>
         </Card>
@@ -131,7 +143,9 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
             ))}
 
             {!data.norm ? (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">Сначала заполните профиль, чтобы рядом с фактическим питанием появились ориентиры на день.</div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
+                Сначала заполните профиль, чтобы рядом с фактическим питанием появились ориентиры на день.
+              </div>
             ) : null}
           </CardContent>
         </Card>
@@ -148,7 +162,7 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                   <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold">{meal.items[0]?.foodItem.name ?? "Прием пищи"}</p>
+                        <p className="font-semibold">{getMealItemLabel(meal)}</p>
                         <Badge variant="secondary">{mealTypeLabels[meal.mealType]}</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">{new Date(meal.consumedAt).toLocaleString("ru-RU")}</p>
@@ -162,12 +176,14 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                   </div>
                   <form action={deleteMealEntryAction} className="mt-3">
                     <input type="hidden" name="mealEntryId" value={meal.id} />
-                    <DeleteEntryButton confirmText={`Удалить прием пищи "${meal.items[0]?.foodItem.name ?? "без названия"}"?`} />
+                    <DeleteEntryButton confirmText={`Удалить прием пищи "${getMealItemLabel(meal)}"?`} />
                   </form>
                 </div>
               ))
             ) : (
-              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">За выбранный день записей нет. Попробуйте добавить прием пищи через черновик.</div>
+              <div className="rounded-[1.25rem] bg-muted/60 p-4 text-sm text-muted-foreground">
+                За выбранный день записей нет. Попробуйте добавить прием пищи через черновик.
+              </div>
             )}
           </CardContent>
         </Card>

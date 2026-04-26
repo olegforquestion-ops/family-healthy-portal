@@ -117,6 +117,21 @@ export function calculateMealItemNutrition(input: {
   };
 }
 
+export function calculateMealPortionNutrition(input: {
+  caloriesPerPortion: number;
+  proteinPerPortion: number;
+  fatPerPortion: number;
+  carbsPerPortion: number;
+  portionCount: number;
+}) {
+  return {
+    calories: Math.round(input.caloriesPerPortion * input.portionCount * 100) / 100,
+    proteinG: Math.round(input.proteinPerPortion * input.portionCount * 100) / 100,
+    fatG: Math.round(input.fatPerPortion * input.portionCount * 100) / 100,
+    carbsG: Math.round(input.carbsPerPortion * input.portionCount * 100) / 100,
+  };
+}
+
 export function projectMealOntoDay(
   current: { calories: number; proteinG: number; fatG: number; carbsG: number },
   delta: { calories: number; proteinG: number; fatG: number; carbsG: number },
@@ -147,15 +162,23 @@ export async function calculateMealDraftPreview(input: {
   quantityGrams: number;
   mealType: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK";
   consumedAt: Date;
+  manualDelta?: {
+    calories: number;
+    proteinG: number;
+    fatG: number;
+    carbsG: number;
+  };
 }) {
   const dayData = await getNutritionDayData(input.userId, input.consumedAt);
-  const delta = calculateMealItemNutrition({
-    caloriesPer100g: Number(input.foodItem.caloriesPer100g),
-    proteinPer100g: Number(input.foodItem.proteinPer100g),
-    fatPer100g: Number(input.foodItem.fatPer100g),
-    carbsPer100g: Number(input.foodItem.carbsPer100g),
-    quantityGrams: input.quantityGrams,
-  });
+  const delta =
+    input.manualDelta ||
+    calculateMealItemNutrition({
+      caloriesPer100g: Number(input.foodItem.caloriesPer100g),
+      proteinPer100g: Number(input.foodItem.proteinPer100g),
+      fatPer100g: Number(input.foodItem.fatPer100g),
+      carbsPer100g: Number(input.foodItem.carbsPer100g),
+      quantityGrams: input.quantityGrams,
+    });
 
   const current = dayData.totals;
   const projected = projectMealOntoDay(current, delta);
