@@ -1,5 +1,4 @@
 import { ProfileForm } from "@/components/forms/profile-form";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireSession } from "@/lib/session";
 import { getProfilePageData } from "@/modules/profiles/queries";
@@ -12,12 +11,6 @@ export default async function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <Badge>Профиль</Badge>
-        <h1 className="font-display text-3xl font-semibold">Профиль и цели на день</h1>
-        <p className="max-w-3xl text-muted-foreground">Здесь можно обновить личные данные, текущий вес и выбрать, как задавать дневные нормы: автоматически или вручную.</p>
-      </div>
-
       <div className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
         <Card>
           <CardHeader>

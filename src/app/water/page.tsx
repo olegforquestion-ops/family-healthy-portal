@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { WaterEntryForm } from "@/components/forms/water-entry-form";
@@ -20,10 +19,7 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <Badge>Вода</Badge>
-        <h1 className="font-display text-3xl font-semibold">Вода</h1>
-        <p className="hidden max-w-3xl text-muted-foreground sm:block">На мобильном это быстрый экран: отметить объем, увидеть прогресс и не утонуть в лишних деталях.</p>
+      <div>
         <p className="text-sm text-muted-foreground">Дата просмотра: {data.date.toLocaleDateString("ru-RU")}</p>
       </div>
 

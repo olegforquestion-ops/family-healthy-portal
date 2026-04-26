@@ -1,10 +1,9 @@
 import Link from "next/link";
 
-import { requireAdminSession } from "@/lib/session";
-import { listUsersWithSummaries } from "@/modules/users/repository";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireAdminSession } from "@/lib/session";
+import { listUsersWithSummaries } from "@/modules/users/repository";
 
 export default async function AdminUsersPage() {
   await requireAdminSession();
@@ -12,12 +11,7 @@ export default async function AdminUsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div className="space-y-2">
-          <Badge variant="success">Только для администратора</Badge>
-          <h1 className="font-display text-3xl font-semibold">Пользователи</h1>
-          <p className="text-muted-foreground">Ручное создание пользователей и контроль базового состояния учетных записей.</p>
-        </div>
+      <div className="flex justify-end">
         <Link href="/admin/users/new">
           <Button>Создать пользователя</Button>
         </Link>
@@ -52,9 +46,13 @@ export default async function AdminUsersPage() {
                     <td className="px-3 py-4 text-muted-foreground">{user.login}</td>
                     <td className="px-3 py-4">{user.role.label}</td>
                     <td className="px-3 py-4">
-                      <Badge variant={user.status === "ACTIVE" ? "success" : "warning"}>
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
+                          user.status === "ACTIVE" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"
+                        }`}
+                      >
                         {user.status === "ACTIVE" ? "Активен" : "Неактивен"}
-                      </Badge>
+                      </span>
                     </td>
                     <td className="px-3 py-4">{user.profile?.profileGoalType.label ?? "Не заполнено"}</td>
                     <td className="px-3 py-4">{latestWeight ? `${latestWeight.weightKg} кг` : "Нет данных"}</td>

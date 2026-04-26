@@ -1,9 +1,8 @@
-import { requireSession } from "@/lib/session";
-import { getMeasurementsPageData } from "@/modules/measurements/queries";
 import { MeasurementEntryForm } from "@/components/forms/measurement-entry-form";
 import { WeightEntryForm } from "@/components/forms/weight-entry-form";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireSession } from "@/lib/session";
+import { getMeasurementsPageData } from "@/modules/measurements/queries";
 
 const measurementLabels: Record<string, string> = {
   WAIST: "Талия",
@@ -19,20 +18,12 @@ export default async function MeasurementsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <Badge>История</Badge>
-        <h1 className="font-display text-3xl font-semibold">Вес и замеры</h1>
-        <p className="max-w-3xl text-muted-foreground">
-          Core-фаза уже хранит историю отдельно по весу и замерам, а новый вес может запускать пересчет текущих норм.
-        </p>
-      </div>
-
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <div className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Добавить вес</CardTitle>
-              <CardDescription>Новая запись попадет в историю и может обновить текущий nutrition snapshot.</CardDescription>
+              <CardDescription>Новая запись попадет в историю и обновит вашу динамику.</CardDescription>
             </CardHeader>
             <CardContent>
               <WeightEntryForm />

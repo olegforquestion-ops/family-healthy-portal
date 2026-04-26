@@ -120,7 +120,6 @@ export function AppShell({ children, session }: AppShellProps) {
               <div className="min-w-0">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:text-xs sm:tracking-[0.2em]">Текущий раздел</p>
                 <p className="font-display text-base font-semibold leading-tight sm:text-xl lg:text-[1.7rem]">{sectionLabel}</p>
-                <p className="mt-1 hidden text-sm text-muted-foreground sm:block">На телефоне упор на быстрые действия дня, на десктопе доступен полный рабочий режим.</p>
               </div>
 
               <div className="flex shrink-0 items-center gap-2 sm:gap-3">

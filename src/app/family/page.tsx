@@ -10,14 +10,6 @@ export default async function FamilyPage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <Badge variant="success">Семейный обзор</Badge>
-        <h1 className="font-display text-3xl font-semibold">Семейная картина</h1>
-        <p className="max-w-3xl text-muted-foreground">
-          Здесь удобно смотреть общую ситуацию по семье: кто держит хороший темп, кому нужна поддержка и как в целом идут дела.
-        </p>
-      </div>
-
       <div className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4 lg:gap-6">
         <Card>
           <CardHeader>

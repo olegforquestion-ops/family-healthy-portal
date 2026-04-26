@@ -1,21 +1,12 @@
-import { requireAdminSession } from "@/lib/session";
 import { CreateUserForm } from "@/components/forms/create-user-form";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireAdminSession } from "@/lib/session";
 
 export default async function CreateUserPage() {
   await requireAdminSession();
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <Badge variant="success">Admin only</Badge>
-        <h1 className="font-display text-3xl font-semibold">Создание пользователя</h1>
-        <p className="max-w-3xl text-muted-foreground">
-          В core-фазе администратор создает пользователя вручную, задает логин, временный пароль, роль и статус. Профиль создается в минимальном виде.
-        </p>
-      </div>
-
       <div className="grid gap-6 xl:grid-cols-[1fr_0.85fr]">
         <Card>
           <CardHeader>

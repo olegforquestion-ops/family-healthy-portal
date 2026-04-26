@@ -26,14 +26,6 @@ export default async function GoalsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <Badge>Цели</Badge>
-        <h1 className="font-display text-3xl font-semibold">Ваши цели</h1>
-        <p className="max-w-3xl text-muted-foreground">
-          Цели помогают держать фокус на важном и видеть движение вперед шаг за шагом.
-        </p>
-      </div>
-
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <Card>
           <CardHeader>

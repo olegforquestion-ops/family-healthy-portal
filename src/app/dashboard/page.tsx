@@ -41,12 +41,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-3">
-        <Badge variant={session.user.role === "ADMIN" ? "success" : "secondary"}>
-          {session.user.role === "ADMIN" ? "Роль: администратор" : "Роль: пользователь"}
-        </Badge>
-        <h1 className="font-display text-3xl font-semibold">Сегодня</h1>
-        <p className="hidden max-w-3xl text-muted-foreground sm:block">Главный экран для телефона: быстро занести еду, воду и тренировку, а затем сразу увидеть картину дня.</p>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          {session.user.role === "ADMIN" ? "Режим администратора" : "Личный режим"}
+        </p>
       </div>
 
       <div className="grid gap-4 lg:hidden">
