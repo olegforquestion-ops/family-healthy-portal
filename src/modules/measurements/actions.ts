@@ -21,6 +21,14 @@ const measurementSchema = z.object({
   note: z.string().optional(),
 });
 
+const deleteWeightSchema = z.object({
+  weightEntryId: z.string().min(1, "Не удалось определить запись веса."),
+});
+
+const deleteMeasurementSchema = z.object({
+  measurementEntryId: z.string().min(1, "Не удалось определить замер."),
+});
+
 export type MeasurementActionState = {
   error?: string;
   success?: string;
@@ -126,4 +134,93 @@ export async function addMeasurementAction(
   revalidatePath("/measurements");
 
   return { success: "Замер добавлен." };
+}
+
+export async function deleteWeightAction(formData: FormData): Promise<void> {
+  const session = await requireSession();
+  const parsed = deleteWeightSchema.safeParse({
+    weightEntryId: formData.get("weightEntryId"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Не удалось удалить запись веса.");
+  }
+
+  await prisma.weightEntry.deleteMany({
+    where: {
+      id: parsed.data.weightEntryId,
+      userId: session.user.id,
+    },
+  });
+
+  const [profile, currentNorm, latestWeight] = await Promise.all([
+    prisma.profile.findUnique({
+      where: { userId: session.user.id },
+    }),
+    prisma.nutritionNormSnapshot.findFirst({
+      where: { userId: session.user.id, isCurrent: true },
+      orderBy: { calculatedAt: "desc" },
+    }),
+    prisma.weightEntry.findFirst({
+      where: { userId: session.user.id },
+      orderBy: { recordedAt: "desc" },
+    }),
+  ]);
+
+  if (profile?.heightCm && currentNorm?.source === "AUTO" && latestWeight) {
+    const calculation = calculateNutritionNorm({
+      activityLevel: profile.activityLevel,
+      dateOfBirth: profile.dateOfBirth,
+      heightCm: profile.heightCm,
+      profileGoalTypeCode: profile.profileGoalTypeCode,
+      sex: profile.sex,
+      waterTargetMl: profile.waterTargetMl,
+      weightKg: Number(latestWeight.weightKg),
+    });
+
+    await prisma.$transaction([
+      prisma.nutritionNormSnapshot.updateMany({
+        where: { userId: session.user.id, isCurrent: true },
+        data: { isCurrent: false },
+      }),
+      prisma.nutritionNormSnapshot.create({
+        data: {
+          userId: session.user.id,
+          sourceWeightKg: latestWeight.weightKg,
+          source: "AUTO",
+          dailyCalories: calculation.dailyCalories,
+          proteinG: new Prisma.Decimal(calculation.proteinG),
+          fatG: new Prisma.Decimal(calculation.fatG),
+          carbsG: new Prisma.Decimal(calculation.carbsG),
+          waterTargetMl: calculation.waterTargetMl,
+          isCurrent: true,
+        },
+      }),
+    ]);
+  }
+
+  revalidatePath("/measurements");
+  revalidatePath("/profile");
+  revalidatePath("/dashboard");
+  revalidatePath("/family");
+}
+
+export async function deleteMeasurementAction(formData: FormData): Promise<void> {
+  const session = await requireSession();
+  const parsed = deleteMeasurementSchema.safeParse({
+    measurementEntryId: formData.get("measurementEntryId"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Не удалось удалить замер.");
+  }
+
+  await prisma.measurementEntry.deleteMany({
+    where: {
+      id: parsed.data.measurementEntryId,
+      userId: session.user.id,
+    },
+  });
+
+  revalidatePath("/measurements");
 }

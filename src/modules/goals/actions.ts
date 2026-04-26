@@ -33,6 +33,10 @@ const createGoalSchema = z.object({
   note: optionalStringField(),
 });
 
+const deleteGoalSchema = z.object({
+  goalId: z.string().min(1, "Не удалось определить цель для удаления."),
+});
+
 export type GoalActionState = {
   error?: string;
   success?: string;
@@ -88,8 +92,7 @@ export async function createGoalAction(_prevState: GoalActionState, formData: Fo
     return { error: "Сначала зафиксируйте текущий вес, затем создавайте цель по весу." };
   }
 
-  const startValue =
-    template.code === "TARGET_WEIGHT" ? Number(latestWeight?.weightKg ?? 0) : 0;
+  const startValue = template.code === "TARGET_WEIGHT" ? Number(latestWeight?.weightKg ?? 0) : 0;
 
   await prisma.goal.create({
     data: {
@@ -110,4 +113,26 @@ export async function createGoalAction(_prevState: GoalActionState, formData: Fo
   revalidatePath("/family");
 
   return { success: "Цель создана." };
+}
+
+export async function deleteGoalAction(formData: FormData): Promise<void> {
+  const session = await requireSession();
+  const parsed = deleteGoalSchema.safeParse({
+    goalId: formData.get("goalId"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Не удалось удалить цель.");
+  }
+
+  await prisma.goal.deleteMany({
+    where: {
+      id: parsed.data.goalId,
+      userId: session.user.id,
+    },
+  });
+
+  revalidatePath("/goals");
+  revalidatePath("/dashboard");
+  revalidatePath("/family");
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Apple,
+  BarChart3,
   Droplets,
   Dumbbell,
   Flag,
@@ -49,6 +50,7 @@ const navItems: NavItem[] = [
   { href: "/nutrition", label: "Питание", icon: NotebookPen, roles: ["ADMIN", "MEMBER"], mobilePrimary: true },
   { href: "/water", label: "Вода", icon: Droplets, roles: ["ADMIN", "MEMBER"], mobilePrimary: true },
   { href: "/workouts", label: "Тренировки", icon: Dumbbell, roles: ["ADMIN", "MEMBER"], mobilePrimary: true },
+  { href: "/analytics", label: "Аналитика", icon: BarChart3, roles: ["ADMIN", "MEMBER"] },
   { href: "/profile", label: "Профиль", icon: UserSquare2, roles: ["ADMIN", "MEMBER"] },
   { href: "/measurements", label: "Вес и замеры", icon: Ruler, roles: ["ADMIN", "MEMBER"] },
   { href: "/foods", label: "База продуктов", icon: Apple, roles: ["ADMIN", "MEMBER"] },

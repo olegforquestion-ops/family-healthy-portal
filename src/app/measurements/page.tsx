@@ -1,7 +1,9 @@
 import { MeasurementEntryForm } from "@/components/forms/measurement-entry-form";
 import { WeightEntryForm } from "@/components/forms/weight-entry-form";
+import { DeleteEntryButton } from "@/components/shared/delete-entry-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireSession } from "@/lib/session";
+import { deleteMeasurementAction, deleteWeightAction } from "@/modules/measurements/actions";
 import { getMeasurementsPageData } from "@/modules/measurements/queries";
 
 const measurementLabels: Record<string, string> = {
@@ -54,6 +56,7 @@ export default async function MeasurementsPage() {
                     <th className="px-3 py-3">Дата</th>
                     <th className="px-3 py-3">Вес</th>
                     <th className="px-3 py-3">Комментарий</th>
+                    <th className="px-3 py-3">Действие</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -62,6 +65,12 @@ export default async function MeasurementsPage() {
                       <td className="px-3 py-4">{new Date(entry.recordedAt).toLocaleDateString("ru-RU")}</td>
                       <td className="px-3 py-4 font-semibold">{entry.weightKg.toString()} кг</td>
                       <td className="px-3 py-4 text-muted-foreground">{entry.note ?? "—"}</td>
+                      <td className="px-3 py-4">
+                        <form action={deleteWeightAction}>
+                          <input type="hidden" name="weightEntryId" value={entry.id} />
+                          <DeleteEntryButton confirmText={`Удалить запись веса за ${new Date(entry.recordedAt).toLocaleDateString("ru-RU")}?`} />
+                        </form>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -82,6 +91,7 @@ export default async function MeasurementsPage() {
                     <th className="px-3 py-3">Тип</th>
                     <th className="px-3 py-3">Значение</th>
                     <th className="px-3 py-3">Комментарий</th>
+                    <th className="px-3 py-3">Действие</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -91,6 +101,12 @@ export default async function MeasurementsPage() {
                       <td className="px-3 py-4">{measurementLabels[entry.type]}</td>
                       <td className="px-3 py-4 font-semibold">{entry.valueCm.toString()} см</td>
                       <td className="px-3 py-4 text-muted-foreground">{entry.note ?? "—"}</td>
+                      <td className="px-3 py-4">
+                        <form action={deleteMeasurementAction}>
+                          <input type="hidden" name="measurementEntryId" value={entry.id} />
+                          <DeleteEntryButton confirmText={`Удалить замер "${measurementLabels[entry.type]}" за ${new Date(entry.recordedAt).toLocaleDateString("ru-RU")}?`} />
+                        </form>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

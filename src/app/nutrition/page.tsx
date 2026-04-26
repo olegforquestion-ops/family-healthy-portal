@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 
+import { DeleteEntryButton } from "@/components/shared/delete-entry-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { requireSession } from "@/lib/session";
+import { deleteMealEntryAction } from "@/modules/nutrition/actions";
 import { getNutritionDayData } from "@/modules/nutrition/queries";
 
 const mealTypeLabels: Record<string, string> = {
@@ -91,6 +93,10 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                   <p className="mt-3 text-sm text-muted-foreground">
                     Б {meal.totalProteinG.toString()} / Ж {meal.totalFatG.toString()} / У {meal.totalCarbsG.toString()}
                   </p>
+                  <form action={deleteMealEntryAction} className="mt-3">
+                    <input type="hidden" name="mealEntryId" value={meal.id} />
+                    <DeleteEntryButton confirmText={`Удалить прием пищи "${meal.items[0]?.foodItem.name ?? "без названия"}"?`} />
+                  </form>
                 </div>
               ))
             ) : (
@@ -154,6 +160,10 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                       <span>У {meal.totalCarbsG.toString()}</span>
                     </div>
                   </div>
+                  <form action={deleteMealEntryAction} className="mt-3">
+                    <input type="hidden" name="mealEntryId" value={meal.id} />
+                    <DeleteEntryButton confirmText={`Удалить прием пищи "${meal.items[0]?.foodItem.name ?? "без названия"}"?`} />
+                  </form>
                 </div>
               ))
             ) : (

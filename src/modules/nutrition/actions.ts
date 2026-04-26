@@ -17,6 +17,10 @@ const previewMealSchema = z.object({
   note: z.string().optional(),
 });
 
+const deleteMealEntrySchema = z.object({
+  mealEntryId: z.string().min(1, "Не удалось определить прием пищи."),
+});
+
 export type MealDraftActionState = {
   error?: string;
   success?: string;
@@ -178,4 +182,26 @@ export async function saveMealDraftAction(
   revalidatePath("/nutrition");
   revalidatePath("/nutrition/draft");
   redirect(`/nutrition?date=${parsed.data.consumedAt.slice(0, 10)}`);
+}
+
+export async function deleteMealEntryAction(formData: FormData): Promise<void> {
+  const session = await requireSession();
+  const parsed = deleteMealEntrySchema.safeParse({
+    mealEntryId: formData.get("mealEntryId"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Не удалось удалить прием пищи.");
+  }
+
+  await prisma.mealEntry.deleteMany({
+    where: {
+      id: parsed.data.mealEntryId,
+      userId: session.user.id,
+    },
+  });
+
+  revalidatePath("/nutrition");
+  revalidatePath("/dashboard");
+  revalidatePath("/family");
 }

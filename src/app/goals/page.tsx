@@ -1,8 +1,10 @@
 import { GoalForm } from "@/components/forms/goal-form";
+import { DeleteEntryButton } from "@/components/shared/delete-entry-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { requireSession } from "@/lib/session";
+import { deleteGoalAction } from "@/modules/goals/actions";
 import { getGoalsPageData } from "@/modules/goals/queries";
 import { getGoalTemplateTargetLabel } from "@/modules/goals/service";
 
@@ -79,6 +81,11 @@ export default async function GoalsPage() {
                       {goal.note ? <span>{goal.note}</span> : <span>{goal.goalTemplate.description}</span>}
                     </div>
                   </div>
+
+                  <form action={deleteGoalAction} className="mt-4">
+                    <input type="hidden" name="goalId" value={goal.id} />
+                    <DeleteEntryButton confirmText={`Удалить цель "${goal.title}"? Это действие нужно только для исправления ошибки.`} />
+                  </form>
                 </div>
               ))
             ) : (

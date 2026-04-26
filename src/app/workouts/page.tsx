@@ -1,10 +1,11 @@
 import { DeleteWorkoutNormButton } from "@/components/workouts/delete-workout-norm-button";
+import { DeleteEntryButton } from "@/components/shared/delete-entry-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkoutEntryForm } from "@/components/forms/workout-entry-form";
 import { WorkoutNormForm } from "@/components/forms/workout-norm-form";
 import { requireSession } from "@/lib/session";
-import { deleteWorkoutNormAction } from "@/modules/workouts/actions";
+import { deleteWorkoutEntryAction, deleteWorkoutNormAction } from "@/modules/workouts/actions";
 import { getWorkoutDayData } from "@/modules/workouts/queries";
 
 const methodLabels: Record<string, string> = {
@@ -83,6 +84,10 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
                       {entry.durationMinutes ? <p className="text-sm text-muted-foreground">{entry.durationMinutes} мин</p> : null}
                     </div>
                   </div>
+                  <form action={deleteWorkoutEntryAction} className="mt-3">
+                    <input type="hidden" name="workoutEntryId" value={entry.id} />
+                    <DeleteEntryButton confirmText={`Удалить тренировку "${entry.activityName}"?`} />
+                  </form>
                 </div>
               ))
             ) : (
@@ -163,6 +168,10 @@ export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) 
                         {entry.durationMinutes ? <p className="text-sm text-muted-foreground">{entry.durationMinutes} мин</p> : null}
                       </div>
                     </div>
+                    <form action={deleteWorkoutEntryAction} className="mt-3">
+                      <input type="hidden" name="workoutEntryId" value={entry.id} />
+                      <DeleteEntryButton confirmText={`Удалить тренировку "${entry.activityName}"?`} />
+                    </form>
                   </div>
                 ))
               ) : (

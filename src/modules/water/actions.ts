@@ -8,9 +8,17 @@ import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/session";
 
 const createWaterEntrySchema = z.object({
-  amountMl: z.coerce.number().int().positive("Укажите объем воды в мл.").max(5000, "Слишком большой объем для одной записи."),
+  amountMl: z.coerce
+    .number()
+    .int()
+    .positive("Укажите объем воды в мл.")
+    .max(5000, "Слишком большой объем для одной записи."),
   recordedAt: z.string().min(1, "Укажите дату и время."),
   note: z.string().max(240, "Комментарий слишком длинный.").optional(),
+});
+
+const deleteWaterEntrySchema = z.object({
+  waterEntryId: z.string().min(1, "Не удалось определить запись воды."),
 });
 
 export type WaterEntryActionState = {
@@ -46,4 +54,26 @@ export async function createWaterEntryAction(
 
   revalidatePath("/water");
   redirect(`/water?date=${parsed.data.recordedAt.slice(0, 10)}`);
+}
+
+export async function deleteWaterEntryAction(formData: FormData): Promise<void> {
+  const session = await requireSession();
+  const parsed = deleteWaterEntrySchema.safeParse({
+    waterEntryId: formData.get("waterEntryId"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Не удалось удалить запись воды.");
+  }
+
+  await prisma.waterEntry.deleteMany({
+    where: {
+      id: parsed.data.waterEntryId,
+      userId: session.user.id,
+    },
+  });
+
+  revalidatePath("/water");
+  revalidatePath("/dashboard");
+  revalidatePath("/family");
 }

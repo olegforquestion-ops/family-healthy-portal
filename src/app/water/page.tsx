@@ -1,7 +1,9 @@
+import { DeleteEntryButton } from "@/components/shared/delete-entry-button";
+import { WaterEntryForm } from "@/components/forms/water-entry-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { WaterEntryForm } from "@/components/forms/water-entry-form";
 import { requireSession } from "@/lib/session";
+import { deleteWaterEntryAction } from "@/modules/water/actions";
 import { getWaterDayData } from "@/modules/water/queries";
 
 type WaterPageProps = {
@@ -61,6 +63,10 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
                     </div>
                     {entry.note ? <p className="max-w-[45%] text-right text-sm text-muted-foreground">{entry.note}</p> : null}
                   </div>
+                  <form action={deleteWaterEntryAction} className="mt-3">
+                    <input type="hidden" name="waterEntryId" value={entry.id} />
+                    <DeleteEntryButton confirmText={`Удалить запись воды на ${entry.amountMl} мл?`} />
+                  </form>
                 </div>
               ))
             ) : (
@@ -108,6 +114,10 @@ export default async function WaterPage({ searchParams }: WaterPageProps) {
                     </div>
                     {entry.note ? <p className="max-w-xs text-right text-sm text-muted-foreground">{entry.note}</p> : null}
                   </div>
+                  <form action={deleteWaterEntryAction} className="mt-3">
+                    <input type="hidden" name="waterEntryId" value={entry.id} />
+                    <DeleteEntryButton confirmText={`Удалить запись воды на ${entry.amountMl} мл?`} />
+                  </form>
                 </div>
               ))
             ) : (

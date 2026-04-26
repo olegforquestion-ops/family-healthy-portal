@@ -58,6 +58,10 @@ const createWorkoutEntrySchema = z.object({
   ),
 });
 
+const deleteWorkoutEntrySchema = z.object({
+  workoutEntryId: z.string().min(1, "Не удалось определить тренировку."),
+});
+
 export type WorkoutActionState = {
   error?: string;
   success?: string;
@@ -274,4 +278,27 @@ export async function createWorkoutEntryAction(
 
   revalidatePath("/workouts");
   redirect(`/workouts?date=${parsed.data.performedAt.slice(0, 10)}`);
+}
+
+export async function deleteWorkoutEntryAction(formData: FormData): Promise<void> {
+  const session = await requireSession();
+  const parsed = deleteWorkoutEntrySchema.safeParse({
+    workoutEntryId: formData.get("workoutEntryId"),
+  });
+
+  if (!parsed.success) {
+    throw new Error(parsed.error.issues[0]?.message || "Не удалось удалить тренировку.");
+  }
+
+  await prisma.workoutEntry.deleteMany({
+    where: {
+      id: parsed.data.workoutEntryId,
+      userId: session.user.id,
+    },
+  });
+
+  revalidatePath("/workouts");
+  revalidatePath("/dashboard");
+  revalidatePath("/family");
+  revalidatePath("/goals");
 }
