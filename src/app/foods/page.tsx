@@ -15,7 +15,9 @@ export default async function FoodsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Добавить запись</CardTitle>
-            <CardDescription>Только самое нужное: название, тип и значения на 100 г.</CardDescription>
+            <CardDescription>
+              Для блюда можно сразу задать порцию в граммах по умолчанию, чтобы она автоматически подставлялась в дневник питания.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <FoodItemForm />
@@ -33,7 +35,7 @@ export default async function FoodsPage() {
                 <tr className="border-b border-border">
                   <th className="px-3 py-3">Название</th>
                   <th className="px-3 py-3">Тип</th>
-                  <th className="px-3 py-3">Порция</th>
+                  <th className="px-3 py-3">Порция по умолчанию</th>
                   <th className="px-3 py-3">Ккал</th>
                   <th className="px-3 py-3">Б</th>
                   <th className="px-3 py-3">Ж</th>
@@ -51,7 +53,9 @@ export default async function FoodsPage() {
                         {food.type === "DISH" ? "Блюдо" : "Продукт"}
                       </span>
                     </td>
-                    <td className="px-3 py-4 text-muted-foreground">{food.portionLabel ?? "100 г"}</td>
+                    <td className="px-3 py-4 text-muted-foreground">
+                      {food.defaultPortionGrams ? `${food.defaultPortionGrams.toString()} г` : "—"}
+                    </td>
                     <td className="px-3 py-4">{food.caloriesPer100g.toString()}</td>
                     <td className="px-3 py-4">{food.proteinPer100g.toString()}</td>
                     <td className="px-3 py-4">{food.fatPer100g.toString()}</td>

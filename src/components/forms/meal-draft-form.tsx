@@ -12,6 +12,7 @@ type MealDraftFormProps = {
     id: string;
     name: string;
     type: "PRODUCT" | "DISH";
+    defaultPortionGrams: { toString(): string } | null;
   }>;
 };
 
@@ -43,10 +44,14 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
   const [state, previewAction, previewPending] = useActionState(previewMealDraftAction, initialState);
   const [, saveAction, savePending] = useActionState(saveMealDraftAction, state);
   const [entryMode, setEntryMode] = useState(state.form?.entryMode || "CATALOG");
+  const [selectedFoodId, setSelectedFoodId] = useState(state.form?.foodItemId || "");
+  const [quantityGrams, setQuantityGrams] = useState(state.form?.quantityGrams || "100");
 
   useEffect(() => {
     setEntryMode(state.form?.entryMode || "CATALOG");
-  }, [state.form?.entryMode]);
+    setSelectedFoodId(state.form?.foodItemId || "");
+    setQuantityGrams(state.form?.quantityGrams || "100");
+  }, [state.form?.entryMode, state.form?.foodItemId, state.form?.quantityGrams]);
 
   const projectedPercent = state.preview?.targets
     ? Math.min(100, Math.round((state.preview.projected.calories / state.preview.targets.calories) * 100))
@@ -55,6 +60,23 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
   const isCatalogMode = entryMode === "CATALOG";
   const isManual100gMode = entryMode === "MANUAL_100G";
   const isManualPortionMode = entryMode === "MANUAL_PORTION";
+  const foodOptionMap = new Map(foodOptions.map((food) => [food.id, food]));
+
+  function handleFoodSelection(foodId: string) {
+    setSelectedFoodId(foodId);
+
+    const selectedFood = foodOptionMap.get(foodId);
+    const defaultPortionGrams = selectedFood?.defaultPortionGrams ? selectedFood.defaultPortionGrams.toString() : null;
+
+    if (defaultPortionGrams) {
+      setQuantityGrams(defaultPortionGrams);
+      return;
+    }
+
+    if (!foodId) {
+      setQuantityGrams("100");
+    }
+  }
 
   return (
     <div className="grid gap-5 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.04fr)] 2xl:gap-6">
@@ -89,7 +111,8 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
                 <select
                   id="foodItemId"
                   name="foodItemId"
-                  defaultValue={state.form?.foodItemId || ""}
+                  value={selectedFoodId}
+                  onChange={(event) => handleFoodSelection(event.target.value)}
                   className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm"
                 >
                   <option value="">Выберите запись</option>
@@ -157,7 +180,8 @@ export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
                     name="quantityGrams"
                     type="number"
                     step="0.01"
-                    defaultValue={state.form?.quantityGrams || "100"}
+                    value={quantityGrams}
+                    onChange={(event) => setQuantityGrams(event.target.value)}
                     className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm"
                   />
                 </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { createFoodAction, type FoodActionState } from "@/modules/foods/actions";
@@ -9,6 +9,13 @@ const initialState: FoodActionState = {};
 
 export function FoodItemForm() {
   const [state, formAction, pending] = useActionState(createFoodAction, initialState);
+  const [foodType, setFoodType] = useState<"PRODUCT" | "DISH">("PRODUCT");
+
+  useEffect(() => {
+    if (state.success) {
+      setFoodType("PRODUCT");
+    }
+  }, [state.success]);
 
   return (
     <form action={formAction} className="grid gap-4 sm:grid-cols-2">
@@ -23,7 +30,13 @@ export function FoodItemForm() {
         <label className="text-sm font-semibold" htmlFor="food-type">
           Тип
         </label>
-        <select id="food-type" name="type" defaultValue="PRODUCT" className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm">
+        <select
+          id="food-type"
+          name="type"
+          value={foodType}
+          onChange={(event) => setFoodType(event.target.value as "PRODUCT" | "DISH")}
+          className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm"
+        >
           <option value="PRODUCT">Продукт</option>
           <option value="DISH">Блюдо</option>
         </select>
@@ -36,12 +49,25 @@ export function FoodItemForm() {
         <input id="food-brand" name="brand" className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm" />
       </div>
 
-      <div className="space-y-2 sm:col-span-2">
-        <label className="text-sm font-semibold" htmlFor="food-portion">
-          Подпись порции
-        </label>
-        <input id="food-portion" name="portionLabel" placeholder="100 г / bowl / piece" className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm" />
-      </div>
+      {foodType === "DISH" ? (
+        <div className="space-y-2 sm:col-span-2">
+          <label className="text-sm font-semibold" htmlFor="food-default-portion">
+            Порция по умолчанию, г
+          </label>
+          <input
+            id="food-default-portion"
+            name="defaultPortionGrams"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="Например, 250"
+            className="w-full rounded-2xl border border-border bg-muted px-4 py-3 text-sm"
+          />
+          <p className="text-sm text-muted-foreground">
+            Эта граммовка будет автоматически подставляться в прием пищи, но ее можно будет изменить перед сохранением.
+          </p>
+        </div>
+      ) : null}
 
       <div className="space-y-2">
         <label className="text-sm font-semibold" htmlFor="food-calories">

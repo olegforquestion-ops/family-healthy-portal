@@ -208,6 +208,7 @@ model FoodItem {
   type                FoodItemType
   brand               String?
   portionLabel        String?
+  defaultPortionGrams Decimal?     @db.Decimal(8, 2)
   caloriesPer100g     Decimal      @db.Decimal(8, 2)
   proteinPer100g      Decimal      @db.Decimal(8, 2)
   fatPer100g          Decimal      @db.Decimal(8, 2)
