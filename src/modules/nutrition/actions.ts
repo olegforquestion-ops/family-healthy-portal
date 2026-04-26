@@ -253,19 +253,21 @@ async function buildPreviewState(input: MealDraftInput): Promise<MealDraftAction
 }
 
 function parseMealDraft(formData: FormData) {
+  const optionalText = (value: FormDataEntryValue | null) => (typeof value === "string" ? value : undefined);
+
   return mealDraftSchema.safeParse({
     entryMode: formData.get("entryMode"),
-    foodItemId: formData.get("foodItemId"),
-    customName: formData.get("customName"),
+    foodItemId: optionalText(formData.get("foodItemId")),
+    customName: optionalText(formData.get("customName")),
     mealType: formData.get("mealType"),
-    quantityGrams: formData.get("quantityGrams"),
-    portionCount: formData.get("portionCount"),
-    manualCalories: formData.get("manualCalories"),
-    manualProteinG: formData.get("manualProteinG"),
-    manualFatG: formData.get("manualFatG"),
-    manualCarbsG: formData.get("manualCarbsG"),
+    quantityGrams: optionalText(formData.get("quantityGrams")),
+    portionCount: optionalText(formData.get("portionCount")),
+    manualCalories: optionalText(formData.get("manualCalories")),
+    manualProteinG: optionalText(formData.get("manualProteinG")),
+    manualFatG: optionalText(formData.get("manualFatG")),
+    manualCarbsG: optionalText(formData.get("manualCarbsG")),
     consumedAt: formData.get("consumedAt"),
-    note: formData.get("note"),
+    note: optionalText(formData.get("note")),
   });
 }
 
