@@ -45,12 +45,19 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
         <div className="space-y-1">
           <p className="text-sm text-muted-foreground">Дата просмотра: {data.date.toLocaleDateString("ru-RU")}</p>
         </div>
-        <Link href="/nutrition/draft">
-          <Button className="w-full sm:w-auto">
-            <Plus className="h-4 w-4" />
-            Добавить прием пищи
-          </Button>
-        </Link>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link href={`/nutrition/plan?date=${data.date.toISOString().slice(0, 10)}`}>
+            <Button className="w-full sm:w-auto" variant="outline">
+              Открыть план дня
+            </Button>
+          </Link>
+          <Link href="/nutrition/draft">
+            <Button className="w-full sm:w-auto">
+              <Plus className="h-4 w-4" />
+              Добавить прием пищи
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4 lg:hidden">

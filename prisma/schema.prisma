@@ -65,6 +65,12 @@ enum NutritionNormSource {
   MANUAL
 }
 
+enum DayNutritionPlanStatus {
+  DRAFT
+  PARTIALLY_LOGGED
+  COMPLETED
+}
+
 model Family {
   id        String   @id @default(cuid())
   name      String
@@ -124,6 +130,7 @@ model User {
   weightEntries          WeightEntry[]
   measurementEntries     MeasurementEntry[]
   createdFoodItems       FoodItem[]                @relation("FoodItemCreator")
+  dayNutritionPlans      DayNutritionPlan[]
   mealEntries            MealEntry[]
   waterEntries           WaterEntry[]
   workoutEntries         WorkoutEntry[]
@@ -219,6 +226,7 @@ model FoodItem {
 
   createdBy User?      @relation("FoodItemCreator", fields: [createdById], references: [id], onDelete: SetNull)
   mealItems  MealItem[]
+  planItems  DayNutritionPlanItem[]
 
   @@index([name])
   @@index([type])
@@ -240,6 +248,7 @@ model MealEntry {
 
   user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   items MealItem[]
+  loggedPlanItems DayNutritionPlanItem[] @relation("LoggedPlanEntry")
 
   @@index([userId, consumedAt])
   @@index([userId, mealType])
@@ -263,6 +272,49 @@ model MealItem {
 
   @@index([mealEntryId])
   @@index([foodItemId])
+}
+
+model DayNutritionPlan {
+  id         String                @id @default(cuid())
+  userId     String
+  plannedFor DateTime
+  status     DayNutritionPlanStatus @default(DRAFT)
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @updatedAt
+
+  user  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items DayNutritionPlanItem[]
+
+  @@unique([userId, plannedFor])
+  @@index([userId, plannedFor])
+  @@index([userId, status])
+}
+
+model DayNutritionPlanItem {
+  id              String    @id @default(cuid())
+  planId          String
+  mealType        MealType
+  foodItemId      String?
+  customName      String?
+  quantityGrams   Decimal?  @db.Decimal(8, 2)
+  portionCount    Decimal?  @db.Decimal(8, 2)
+  calories        Decimal   @db.Decimal(8, 2)
+  proteinG        Decimal   @db.Decimal(8, 2)
+  fatG            Decimal   @db.Decimal(8, 2)
+  carbsG          Decimal   @db.Decimal(8, 2)
+  isLogged        Boolean   @default(false)
+  loggedMealEntryId String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  plan            DayNutritionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  foodItem        FoodItem?        @relation(fields: [foodItemId], references: [id], onDelete: SetNull)
+  loggedMealEntry MealEntry?       @relation("LoggedPlanEntry", fields: [loggedMealEntryId], references: [id], onDelete: SetNull)
+
+  @@index([planId, mealType])
+  @@index([foodItemId])
+  @@index([loggedMealEntryId])
+  @@index([isLogged])
 }
 
 model WaterEntry {
