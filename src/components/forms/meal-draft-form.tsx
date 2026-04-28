@@ -23,24 +23,23 @@ function getLocalDateTimeInputValue() {
   return local.toISOString().slice(0, 16);
 }
 
-const initialState: MealDraftActionState = {
-  form: {
-    entryMode: "CATALOG",
-    foodItemId: "",
-    customName: "",
-    mealType: "LUNCH",
-    quantityGrams: "100",
-    portionCount: "1",
-    manualCalories: "",
-    manualProteinG: "",
-    manualFatG: "",
-    manualCarbsG: "",
-    consumedAt: getLocalDateTimeInputValue(),
-    note: "",
-  },
-};
-
 export function MealDraftForm({ foodOptions }: MealDraftFormProps) {
+  const initialState: MealDraftActionState = {
+    form: {
+      entryMode: "CATALOG",
+      foodItemId: "",
+      customName: "",
+      mealType: "LUNCH",
+      quantityGrams: "100",
+      portionCount: "1",
+      manualCalories: "",
+      manualProteinG: "",
+      manualFatG: "",
+      manualCarbsG: "",
+      consumedAt: getLocalDateTimeInputValue(),
+      note: "",
+    },
+  };
   const [state, previewAction, previewPending] = useActionState(previewMealDraftAction, initialState);
   const [, saveAction, savePending] = useActionState(saveMealDraftAction, state);
   const [entryMode, setEntryMode] = useState(state.form?.entryMode || "CATALOG");
